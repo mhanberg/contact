@@ -10,5 +10,7 @@ deploy:
   app: quiet-atoll-83762
   on:
     repo: mhanberg/contact
+  run:
+    - "mix ecto.migrate"
 notifications:
   email: false
