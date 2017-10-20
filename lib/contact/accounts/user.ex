@@ -3,6 +3,7 @@ defmodule Contact.Accounts.User do
   import Ecto.Changeset
   alias Contact.Accounts.User
 
+  @derive {Poison.Encoder, only: [:email, :username, :first_name, :last_name]}
   schema "users" do
     field :email, :string
     field :username, :string
@@ -10,6 +11,7 @@ defmodule Contact.Accounts.User do
     field :last_name, :string
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
+    field :password_digest
 
     timestamps()
   end
@@ -29,6 +31,8 @@ defmodule Contact.Accounts.User do
     user
     |> cast(attrs, @required_fields)
     |> validate_required(@required_fields)
+    |> unique_constraint(:email)
+    |> unique_constraint(:username)
     |> validate_format(:email, ~r/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i)
   end
 

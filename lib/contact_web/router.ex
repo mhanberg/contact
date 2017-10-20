@@ -20,7 +20,11 @@ defmodule ContactWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", ContactWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", ContactWeb.Api, as: :api do
+    pipe_through :api
+
+    scope "/v1", V1, as: :v1 do
+      resources "/users", UserController, only: [:create]
+    end
+  end
 end
