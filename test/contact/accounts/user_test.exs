@@ -46,13 +46,7 @@ defmodule Contact.Accounts.UserTest do
     changeset = User.signup_changeset(%User{}, Map.put(@valid_attrs, :password, "pass"))
     refute changeset.valid?
 
-    too_long_password = """
-      passwordpasswordpasswordpasswordpasswordpasswordpasswordpassword
-      passwordpasswordpasswordpasswordpasswordpasswordpasswordpassword
-      passwordpasswordpasswordpasswordpasswordpasswordpasswordpassword
-      passwordpasswordpasswordpasswordpasswordpasswordpasswordpassword
-    """
-    changeset = User.signup_changeset(%User{}, Map.put(@valid_attrs, :password, too_long_password))
+    changeset = User.signup_changeset(%User{}, %{@valid_attrs | password: String.duplicate("p", 256)})
     refute changeset.valid?
   end
 
