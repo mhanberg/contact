@@ -9,7 +9,7 @@ defmodule ContactWeb.Api.V1.UserController do
         render conn, "create.json", user: user
       {:error, changeset} ->
         conn
-        |> put_status(400)
+        |> put_status(409)
         |> render(ContactWeb.ErrorView, "400.json", changeset: changeset)
     end
   end

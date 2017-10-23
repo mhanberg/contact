@@ -20,7 +20,7 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
     assert json_response(conn, 200) == render_json("create.json", user: @expected)
   end
 
-  test "create renders 400 and error messages on invalid body" do
+  test "create renders 409 and error messages on invalid body" do
     conn = build_conn()
 
     conn = post conn, "api/v1/users", %{}
@@ -33,18 +33,18 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
         "status" => "failure"
     }
 
-    assert json_response(conn, 400) == expected
+    assert json_response(conn, 409) == expected
   end
 
-  test "create renders 400 and password mismatch error" do
+  test "create renders 409 and password mismatch error" do
     conn = build_conn()
 
     conn = post conn, "api/v1/users", Map.put(@valid_body, :password_confirmation, "wrongpass")
 
-    assert json_response(conn, 400) == %{"status" => "failure", "errors" => %{"password_confirmation" => ["does not match confirmation"]}}
+    assert json_response(conn, 409) == %{"status" => "failure", "errors" => %{"password_confirmation" => ["does not match confirmation"]}}
   end
 
-  test "create renders 400 when email is already taken" do
+  test "create renders 409 when email is already taken" do
     conn = build_conn()
     conn = post conn, "/api/v1/users", @valid_body
 
@@ -52,10 +52,10 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
 
     conn = post conn, "/api/v1/users", %{ @valid_body | username: "something different" }
 
-    assert json_response(conn, 400) == %{"status" => "failure", "errors" => %{"email" => ["has already been taken"]}}
+    assert json_response(conn, 409) == %{"status" => "failure", "errors" => %{"email" => ["has already been taken"]}}
   end
 
-  test "create renders 400 when username is already taken" do
+  test "create renders 409 when username is already taken" do
     conn = build_conn()
     conn = post conn, "/api/v1/users", @valid_body
 
@@ -63,7 +63,7 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
 
     conn = post conn, "/api/v1/users", %{ @valid_body | email: "different@yep.com" }
 
-    assert json_response(conn, 400) == %{"status" => "failure", "errors" => %{"username" => ["has already been taken"]}}
+    assert json_response(conn, 409) == %{"status" => "failure", "errors" => %{"username" => ["has already been taken"]}}
   end
 
   defp render_json(template, assigns) do
