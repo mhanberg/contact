@@ -9,10 +9,17 @@ defmodule ContactWeb.ErrorView do
     "Internal server error"
   end
 
-  def render("400.json", %{changeset: changeset}) do
+  def render("409.json", %{changeset: changeset}) do
     %{
-      status: "failure",
       errors: Ecto.Changeset.traverse_errors(changeset, &translate_error/1)
+    }
+  end
+
+  def render("400.json", _assigns) do
+    %{
+      errors: [
+        %{ status: 400, detail: "Bad Request" }
+      ]
     }
   end
 
