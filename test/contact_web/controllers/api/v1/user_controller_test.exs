@@ -25,46 +25,48 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
     }
   }
 
-  test "create happy path", %{conn: conn} do
-    conn = post conn, "/api/v1/users", @valid_body
+  describe "create" do
+    test "happy path", %{conn: conn} do
+      conn = post conn, "/api/v1/users", @valid_body
 
-    assert_success_result(json_response(conn, 200))
-  end
+      assert_success_result(json_response(conn, 200))
+    end
 
-  test "create renders 409 and error messages on invalid body", %{conn: conn} do
-    conn = post conn, "api/v1/users", %{}
-    expected = %{
-      "errors" => [
-        %{
-          "status" => 400,
-          "detail" => "Bad Request"
-        }
-      ]
-    }
+    test "renders 409 and error messages on invalid body", %{conn: conn} do
+      conn = post conn, "api/v1/users", %{}
+      expected = %{
+        "errors" => [
+          %{
+            "status" => 400,
+            "detail" => "Bad Request"
+          }
+        ]
+      }
 
-    assert json_response(conn, 400) == expected
-  end
+      assert json_response(conn, 400) == expected
+    end
 
-  test "create renders 409 and password mismatch error", %{conn: conn} do
-    conn = post conn, "api/v1/users", put_in(@valid_body.data.attributes.password_confirmation, "wrongpass")
+    test "renders 409 and password mismatch error", %{conn: conn} do
+      conn = post conn, "api/v1/users", put_in(@valid_body.data.attributes.password_confirmation, "wrongpass")
 
-    assert json_response(conn, 409) == %{"errors" => %{"password_confirmation" => ["does not match confirmation"]}}
-  end
+      assert json_response(conn, 409) == %{"errors" => %{"password_confirmation" => ["does not match confirmation"]}}
+    end
 
-  test "create renders 409 when email is already taken", %{conn: conn} do
-    insert(:user)
+    test "renders 409 when email is already taken", %{conn: conn} do
+      insert(:user)
 
-    conn = post conn, "/api/v1/users", put_in(@valid_body.data.attributes.username, "something different")
+      conn = post conn, "/api/v1/users", put_in(@valid_body.data.attributes.username, "something different")
 
-    assert json_response(conn, 409) == %{"errors" => %{"email" => ["has already been taken"]}}
-  end
+      assert json_response(conn, 409) == %{"errors" => %{"email" => ["has already been taken"]}}
+    end
 
-  test "create renders 409 when username is already taken", %{conn: conn} do
-    insert(:user)
+    test "renders 409 when username is already taken", %{conn: conn} do
+      insert(:user)
 
-    conn = post conn, "/api/v1/users", put_in(@valid_body.data.attributes.email, "different@yep.com")
+      conn = post conn, "/api/v1/users", put_in(@valid_body.data.attributes.email, "different@yep.com")
 
-    assert json_response(conn, 409) == %{"errors" => %{"username" => ["has already been taken"]}}
+      assert json_response(conn, 409) == %{"errors" => %{"username" => ["has already been taken"]}}
+    end
   end
 
   defp assert_success_result(response) do
