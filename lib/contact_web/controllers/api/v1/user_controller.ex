@@ -5,9 +5,10 @@ defmodule ContactWeb.Api.V1.UserController do
 
   alias Contact.{Accounts, Accounts.User}
 
-  def create(conn, %{"data" => %{ "attributes" => attrs }}) do
+  def create(conn, %{"data" => data}) do
+    attrs = JaSerializer.Params.to_attributes(data)
     with {:ok, %User{} = user} <- Accounts.create_user(attrs) do
-      render conn, "create.json", user: user
+      render conn, "show.json-api", user: user
     end
   end
 
