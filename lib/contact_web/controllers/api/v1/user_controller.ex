@@ -1,16 +1,13 @@
 defmodule ContactWeb.Api.V1.UserController do
   use ContactWeb, :controller
 
+  action_fallback ContactWeb.Api.V1.FallbackController
+
   alias Contact.{Accounts, Accounts.User}
 
   def create(conn, %{"data" => %{ "attributes" => attrs }}) do
-    case Accounts.create_user(attrs) do
-      {:ok, %User{} = user} ->
-        render conn, "create.json", user: user
-      {:error, changeset} ->
-        conn
-        |> put_status(409)
-        |> render(ContactWeb.ErrorView, "409.json", changeset: changeset)
+    with {:ok, %User{} = user} <- Accounts.create_user(attrs) do
+      render conn, "create.json", user: user
     end
   end
 
