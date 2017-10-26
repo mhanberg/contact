@@ -3,8 +3,8 @@ defmodule Contact.UserFactory do
     quote do
       def user_factory do
         %Contact.Accounts.User{
-          username: "legoman25",
-          email: "legoman25@aol.com",
+          username: sequence(:email, &"user#{&1}"),
+          email: sequence(:email, &"email-#{&1}@example.com"),
           first_name: "Mitch",
           last_name: "Hanberg",
           password_digest: "password"
