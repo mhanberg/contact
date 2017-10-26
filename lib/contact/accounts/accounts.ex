@@ -20,4 +20,8 @@ defmodule Contact.Accounts do
 
     Repo.update(changeset)
   end
+
+  def get_user(id) do
+    User |> Repo.get(id)
+  end
 end

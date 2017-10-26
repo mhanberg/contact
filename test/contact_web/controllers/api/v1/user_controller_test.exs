@@ -1,6 +1,7 @@
 defmodule ContactWeb.Api.V1.UserControllerTest do
   use ContactWeb.ConnCase
   import Contact.Factory
+  alias ContactWeb.Api.V1.UserSerializer
 
   setup %{conn: conn} do
     conn =
@@ -111,6 +112,23 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
       conn = patch conn, "/api/v1/users/#{user.id}", %{ "data" => %{ "id" => user.id, "attributes" => %{ "username" => "imtaken"}}}
 
       assert json_response(conn, 409) == %{"errors" => %{"username" => ["has already been taken"]}}
+    end
+  end
+
+  describe "show" do
+    test "happy path", %{conn: conn} do
+      user = insert(:user)
+
+      conn = get conn, "/api/v1/users/#{user.id}"
+
+      expected = UserSerializer |> JaSerializer.format(user)
+      assert json_response(conn, 200) == expected
+    end
+
+    test "sad path", %{conn: conn} do
+      conn = get conn, "/api/v1/users/23423515125312"
+
+      assert json_response(conn, 404)
     end
   end
 

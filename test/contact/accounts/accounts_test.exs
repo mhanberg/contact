@@ -29,4 +29,12 @@ defmodule Contact.AccountsTest do
 
     assert user.first_name == "billy"
   end
+
+  test "get users succeeds with valid id" do
+    expected_user = insert(:user)
+
+    assert %User{} = user = Accounts.get_user(expected_user.id)
+
+    assert expected_user == user
+  end
 end

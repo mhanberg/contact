@@ -26,4 +26,10 @@ defmodule ContactWeb.Api.V1.UserController do
       render conn, "show.json-api", user: user
     end
   end
+
+  def show(conn, %{"id" => id}) do
+    with %User{} = user <- Accounts.get_user(id) do
+      render conn, "show.json-api", user: user
+    end
+  end
 end
