@@ -22,6 +22,20 @@ defmodule Contact.Accounts do
   end
 
   def get_user(id) do
-    User |> Repo.get(id)
+    case User |> Repo.get(id) do
+      %User{} = user ->
+        user
+      nil ->
+        {:error, :not_found}
+    end
+  end
+
+  def delete_user(id) do
+    case User |> Repo.get(id) do
+      %User{} = user ->
+        Repo.delete(user)
+      nil ->
+        {:error, :not_found}
+    end
   end
 end

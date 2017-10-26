@@ -132,6 +132,22 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
     end
   end
 
+  describe "delete" do
+    test "happy path", %{conn: conn} do
+      user = insert(:user)
+
+      conn = delete conn, "/api/v1/users/#{user.id}"
+
+      assert json_response(conn, 204)
+    end
+
+    test "sad path", %{conn: conn} do
+      conn = delete conn, "/api/v1/users/2342342423432"
+
+      assert json_response(conn, 404)
+    end
+  end
+
   defp assert_success_result(response) do
     assert %{
       "data" => %{

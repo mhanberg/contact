@@ -32,4 +32,12 @@ defmodule ContactWeb.Api.V1.UserController do
       render conn, "show.json-api", user: user
     end
   end
+
+  def delete(conn, %{"id" => id}) do
+    with {:ok, %User{}} <- Accounts.delete_user(id) do
+      conn
+      |> put_status(204)
+      |> render("delete.json-api")
+    end
+  end
 end

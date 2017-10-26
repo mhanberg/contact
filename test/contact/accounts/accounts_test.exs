@@ -37,4 +37,14 @@ defmodule Contact.AccountsTest do
 
     assert expected_user == user
   end
+
+  test "delete user succeeds with valid id" do
+    expected_user = insert(:user)
+
+    assert {:ok, %User{}} = Accounts.delete_user(expected_user.id)
+  end
+
+  test "returns not found when user not found" do
+    assert {:error, :not_found} = Accounts.delete_user(34523452354)
+  end
 end
