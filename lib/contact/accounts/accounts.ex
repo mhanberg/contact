@@ -12,4 +12,12 @@ defmodule Contact.Accounts do
 
     Repo.insert(changeset)
   end
+
+  def update_user(id, attrs) do
+    user = User |> Repo.get(id)
+
+    changeset = user |> User.changeset(attrs)
+
+    Repo.update(changeset)
+  end
 end

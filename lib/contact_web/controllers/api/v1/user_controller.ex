@@ -17,4 +17,13 @@ defmodule ContactWeb.Api.V1.UserController do
     |> put_status(400)
     |> render(ContactWeb.ErrorView, "400.json")
   end
+
+  def update(conn, %{"data" => data}) do
+    attrs = JaSerializer.Params.to_attributes(data)
+    id = data["id"]
+
+    with {:ok, %User{} = user} <- Accounts.update_user(id, attrs) do
+      render conn, "show.json-api", user: user
+    end
+  end
 end

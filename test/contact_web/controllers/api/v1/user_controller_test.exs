@@ -53,7 +53,7 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
     end
 
     test "renders 409 when email is already taken", %{conn: conn} do
-      insert(:user)
+      insert(:user, email: @valid_body.data.attributes.email)
 
       conn = post conn, "/api/v1/users", put_in(@valid_body.data.attributes.username, "something different")
 
@@ -61,9 +61,54 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
     end
 
     test "renders 409 when username is already taken", %{conn: conn} do
-      insert(:user)
+      insert(:user, username: @valid_body.data.attributes.username)
 
       conn = post conn, "/api/v1/users", put_in(@valid_body.data.attributes.email, "different@yep.com")
+
+      assert json_response(conn, 409) == %{"errors" => %{"username" => ["has already been taken"]}}
+    end
+  end
+
+  describe "update" do
+    test "happy path", %{conn: conn} do
+      user = insert(:user)
+
+      conn = patch conn, "/api/v1/users/#{user.id}", %{ "data" => %{ "id" => user.id, "attributes" => %{ first_name: "billy" }}}
+
+      assert response = json_response(conn, 200)
+
+      expected = %{
+        "data" => %{
+          "attributes" => %{
+            "email" => user.email,
+            "username" => user.username,
+            "first-name" => "billy",
+            "last-name" => user.last_name
+          },
+          "type" => "user",
+          "id" => "#{user.id}",
+          "links" => %{"self" => "/api/v1/users/#{user.id}"}
+        },
+        "jsonapi" => %{"version" => "1.0"}
+      }
+
+      assert expected == response
+    end
+
+    test "returns 409 when email is changed but already taken", %{conn: conn} do
+      user = insert(:user, email: "legoman25@aol.com")
+      insert(:user, email: "imtaken@foo.bar")
+
+      conn = patch conn, "/api/v1/users/#{user.id}", %{ "data" => %{ "id" => user.id, "attributes" => %{"email" => "imtaken@foo.bar"}}}
+
+      assert json_response(conn, 409) == %{"errors" => %{"email" => ["has already been taken"]}}
+    end
+
+    test "returns 409 when username is changed but already taken", %{conn: conn} do
+      user = insert(:user, username: "legoman25")
+      insert(:user, username: "imtaken")
+
+      conn = patch conn, "/api/v1/users/#{user.id}", %{ "data" => %{ "id" => user.id, "attributes" => %{ "username" => "imtaken"}}}
 
       assert json_response(conn, 409) == %{"errors" => %{"username" => ["has already been taken"]}}
     end

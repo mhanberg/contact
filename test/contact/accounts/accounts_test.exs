@@ -1,5 +1,6 @@
 defmodule Contact.AccountsTest do
   use Contact.DataCase
+  import Contact.Factory
   alias Contact.Accounts
   alias Contact.Accounts.User
 
@@ -19,5 +20,13 @@ defmodule Contact.AccountsTest do
     assert user.username == @valid_attrs.username
     assert user.first_name == @valid_attrs.first_name
     assert user.last_name == @valid_attrs.last_name
+  end
+
+  test "update_user succeeds with valid data" do
+    user = insert(:user)
+
+    assert {:ok, %User{} = user} = Accounts.update_user(user.id, %{ first_name: "billy" })
+
+    assert user.first_name == "billy"
   end
 end
