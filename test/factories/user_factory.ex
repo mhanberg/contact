@@ -7,7 +7,7 @@ defmodule Contact.UserFactory do
           email: sequence(:email, &"email-#{&1}@example.com"),
           first_name: "Mitch",
           last_name: "Hanberg",
-          password_digest: "password"
+          password_digest: Comeonin.Bcrypt.hashpwsalt("password")
         }
       end
     end

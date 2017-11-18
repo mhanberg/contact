@@ -30,12 +30,53 @@ defmodule Contact.Accounts do
     end
   end
 
+  def get_user_by(:username, username) do
+    case User |> Repo.get_by(username: username) do
+      %User{} = user ->
+        user
+      nil ->
+        {:error, :not_found}
+    end
+  end
+
+  def get_user_by(:email, email) do
+    case User |> Repo.get_by(email: email) do
+      %User{} = user ->
+        user
+      nil ->
+        {:error, :not_found}
+    end
+  end
+
+  def find(email_or_username) do
+    case get_user_by(:email, email_or_username) do
+      %User{} = user ->
+        user
+      {:error, :not_found} ->
+        case get_user_by(:username, email_or_username) do
+          %User{} = user ->
+            user
+          {:error, :not_found} ->
+            {:error, :unauthorized}
+        end
+    end
+  end
+
   def delete_user(id) do
     case User |> Repo.get(id) do
       %User{} = user ->
         Repo.delete(user)
       nil ->
         {:error, :not_found}
+    end
+  end
+
+  def authenticate(%{user: user, password: password}) do
+    case Comeonin.Bcrypt.checkpw(password, user.password_digest) do
+      true ->
+        ContactWeb.Guardian.encode_and_sign(user)
+      _ ->
+        {:error, :unauthorized}
     end
   end
 end

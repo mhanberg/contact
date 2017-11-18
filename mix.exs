@@ -44,7 +44,8 @@ defmodule Contact.Mixfile do
       {:comeonin, "~> 4.0"},
       {:bcrypt_elixir, "~> 1.0"},
       {:ja_serializer, "~> 0.12.0"},
-      {:ex_machina, "~> 2.1", only: :test}
+      {:ex_machina, "~> 2.1", only: :test},
+      {:guardian, "~> 1.0-beta"}
     ]
   end
 

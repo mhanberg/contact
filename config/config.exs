@@ -30,6 +30,11 @@ config :mime, :types, %{
   "application/vnd.api+json" => ["json-api"]
 }
 
+# Guardian configuration
+config :contact, ContactWeb.Guardian,
+  issuer: "contact",
+  secret_key: "bu5/JsBOnyPOKKNPpK4t79F1R6D8I0VTSiUWJKJEExnOlqTVX426s2Lt9CU25+DW"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

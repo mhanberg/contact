@@ -40,4 +40,21 @@ defmodule ContactWeb.Api.V1.UserController do
       |> render("delete.json-api")
     end
   end
+
+  def sign_in(conn, %{"data" => data}) do
+    attrs = JaSerializer.Params.to_attributes(data)
+
+    login_cred = case attrs do
+      %{"username" => username, "password" => password} ->
+        %{login: username, password: password}
+      %{"email" => email, "password" => password} ->
+        %{login: email, password: password}
+    end
+
+    with %User{} = user <- Accounts.find(login_cred.login) do
+      with {:ok, token, _claims} <- Accounts.authenticate(%{user: user, password: login_cred.password}) do
+        render conn, "token.json-api", token: token
+      end
+    end
+  end
 end

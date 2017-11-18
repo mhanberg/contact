@@ -15,18 +15,30 @@ defmodule ContactWeb.Router do
     plug JaSerializer.Deserializer
   end
 
+  pipeline :api_auth do
+    plug ContactWeb.Guardian.AuthPipeline
+  end
+
   scope "/", ContactWeb do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  scope "/api", ContactWeb.Api, as: :api do
+  scope "/api", ContactWeb.Api do
     pipe_through :api
 
-    scope "/v1", V1, as: :v1 do
-      resources "/users", UserController, only: [:create, :update, :show, :delete]
+    scope "/v1", V1 do
+      resources "/users", UserController, only: [:create]
+      post "/users/sign_in", UserController, :sign_in
+    end
+  end
+
+  scope "/api", ContactWeb.Api do
+    pipe_through [:api, :api_auth]
+
+    scope "/v1", V1 do
+      resources "/users", UserController, only: [:update, :show, :delete]
     end
   end
 end
