@@ -5,7 +5,7 @@ defmodule Contact.Accounts do
 
   import Ecto.Query, warn: false
   alias Contact.Repo
-  alias Contact.Accounts.User
+  alias Contact.Accounts.{User, Team}
 
   def create_user(attrs) do
     changeset = %User{} |> User.signup_changeset(attrs)
@@ -77,6 +77,38 @@ defmodule Contact.Accounts do
         ContactWeb.Guardian.encode_and_sign(user)
       _ ->
         {:error, :unauthorized}
+    end
+  end
+
+  def get_team(id) do
+    case Team |> Repo.get(id) |> Repo.preload(:owner) do
+      %Team{} = team ->
+        team
+      nil ->
+        {:error, :not_found}
+    end
+  end
+
+  def create_team(attrs) do
+    changeset = %Team{} |> Team.changeset(attrs)
+
+    Repo.insert(changeset)
+  end
+
+  def update_team(id, attrs) do
+    team = Team |> Repo.get(id) |> Repo.preload(:owner)
+
+    changeset = team |> Team.changeset(attrs)
+
+    Repo.update(changeset)
+  end
+
+  def delete_team(id) do
+    case Team |> Repo.get(id) do
+      %Team{} = team ->
+        Repo.delete(team)
+      nil ->
+        {:error, :not_found}
     end
   end
 end

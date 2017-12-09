@@ -2,9 +2,9 @@ defmodule Contact.AccountsTest do
   use Contact.DataCase
   import Contact.Factory
   alias Contact.Accounts
-  alias Contact.Accounts.User
+  alias Contact.Accounts.{User, Team}
 
-  @valid_attrs %{
+  @valid_user_attrs %{
     email: "legoman25@aol.com",
     username: "legoman25",
     first_name: "Mitch",
@@ -14,12 +14,12 @@ defmodule Contact.AccountsTest do
   }
   describe "create_user" do
     test "create_user succeeds with valid data" do
-      assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
+      assert {:ok, %User{} = user} = Accounts.create_user(@valid_user_attrs)
 
-      assert user.email == @valid_attrs.email
-      assert user.username == @valid_attrs.username
-      assert user.first_name == @valid_attrs.first_name
-      assert user.last_name == @valid_attrs.last_name
+      assert user.email == @valid_user_attrs.email
+      assert user.username == @valid_user_attrs.username
+      assert user.first_name == @valid_user_attrs.first_name
+      assert user.last_name == @valid_user_attrs.last_name
     end
   end
 
@@ -113,6 +113,41 @@ defmodule Contact.AccountsTest do
       user = insert(:user, password_digest: Comeonin.Bcrypt.hashpwsalt("password"))
 
       assert {:error, :unauthorized} = Accounts.authenticate(%{user: user, password: "notthepassword"})
+    end
+  end
+
+  describe "team" do
+    test "get" do
+      expected_team = insert(:team)
+
+      assert %Team{} = team = Accounts.get_team(expected_team.id)
+
+      assert expected_team == team
+    end
+
+    test "create" do
+      valid_team_attrs = %{
+        name: "Bob's Team",
+        owner: insert(:user)
+      }
+      assert {:ok, %Team{} = team} = Accounts.create_team(valid_team_attrs)
+
+      assert team.name == valid_team_attrs.name
+      assert team.owner == valid_team_attrs.owner
+    end
+
+    test "update" do
+      team = insert(:team)
+
+      assert {:ok, %Team{} = team} = Accounts.update_team(team.id, %{ team | name: "McDonalds" } |> Map.from_struct)
+
+      assert team.name == "McDonalds"
+    end
+
+    test "delete" do
+      expected_team = insert(:team)
+
+      assert {:ok, %Team{}} = Accounts.delete_team(expected_team.id)
     end
   end
 end
