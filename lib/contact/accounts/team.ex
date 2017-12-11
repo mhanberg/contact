@@ -14,7 +14,7 @@ defmodule Contact.Accounts.Team do
   def changeset(%Team{} = team, attrs) do
     team
       |> cast(attrs, [:name])
-      |> put_assoc(:owner, attrs[:owner])
+      |> put_assoc(:owner, attrs["owner"])
       |> validate_required([:name, :owner])
   end
 end

@@ -39,6 +39,7 @@ defmodule ContactWeb.Router do
 
     scope "/v1", V1 do
       resources "/users", UserController, only: [:update, :show, :delete]
+      resources "/teams", TeamController, only: [:create]
     end
   end
 end

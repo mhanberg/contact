@@ -90,6 +90,7 @@ defmodule Contact.Accounts do
   end
 
   def create_team(attrs) do
+    attrs = Map.put(attrs, "owner", Repo.get(User, attrs["owner_id"]))
     changeset = %Team{} |> Team.changeset(attrs)
 
     Repo.insert(changeset)

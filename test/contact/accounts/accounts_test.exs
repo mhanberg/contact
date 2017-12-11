@@ -126,9 +126,11 @@ defmodule Contact.AccountsTest do
     end
 
     test "create" do
+      user = insert(:user)
       valid_team_attrs = %{
         name: "Bob's Team",
-        owner: insert(:user)
+        owner: user,
+        owner_id: user.id
       }
       assert {:ok, %Team{} = team} = Accounts.create_team(valid_team_attrs)
 
