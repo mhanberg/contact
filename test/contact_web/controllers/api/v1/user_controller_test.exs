@@ -30,7 +30,7 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
     test "create happy path", %{conn: conn} do
       conn = post conn, "/api/v1/users", @valid_body
 
-      assert_success_result(json_response(conn, 200))
+      assert_success_result(json_response(conn, 201))
     end
 
     test "create renders 409 and error messages on invalid body", %{conn: conn} do

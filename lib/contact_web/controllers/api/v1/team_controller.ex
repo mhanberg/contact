@@ -9,7 +9,9 @@ defmodule ContactWeb.Api.V1.TeamController do
     attrs = JaSerializer.Params.to_attributes(data)
 
     with {:ok, %Team{} = team} <- Accounts.create_team(attrs) do
-      render conn, "show.json-api", team: team
+      conn
+      |> put_status(201)
+      |> render("show.json-api", team: team)
     end
   end
 end

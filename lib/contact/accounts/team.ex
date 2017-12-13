@@ -1,7 +1,8 @@
 defmodule Contact.Accounts.Team do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Contact.Accounts.Team
+  alias Contact.Accounts.{User, Team}
+  alias Contact.Repo
 
   @derive {Poison.Encoder, only: [:name, :owner]}
   schema "teams" do
@@ -14,7 +15,7 @@ defmodule Contact.Accounts.Team do
   def changeset(%Team{} = team, attrs) do
     team
       |> cast(attrs, [:name])
-      |> put_assoc(:owner, attrs["owner"])
+      |> put_assoc(:owner, Repo.get(User, attrs["owner_id"]))
       |> validate_required([:name, :owner])
   end
 end

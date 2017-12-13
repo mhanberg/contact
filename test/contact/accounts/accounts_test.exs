@@ -128,20 +128,19 @@ defmodule Contact.AccountsTest do
     test "create" do
       user = insert(:user)
       valid_team_attrs = %{
-        name: "Bob's Team",
-        owner: user,
-        owner_id: user.id
+        "name" => "Bob's Team",
+        "owner_id" => user.id
       }
       assert {:ok, %Team{} = team} = Accounts.create_team(valid_team_attrs)
 
-      assert team.name == valid_team_attrs.name
-      assert team.owner == valid_team_attrs.owner
+      assert team.name == valid_team_attrs["name"]
+      assert team.owner == user
     end
 
     test "update" do
       team = insert(:team)
 
-      assert {:ok, %Team{} = team} = Accounts.update_team(team.id, %{ team | name: "McDonalds" } |> Map.from_struct)
+      assert {:ok, %Team{} = team} = Accounts.update_team(team.id, %{"owner_id" => team.owner_id, "name" => "McDonalds" })
 
       assert team.name == "McDonalds"
     end
