@@ -31,4 +31,44 @@ defmodule ContactWeb.Api.V1.TeamControllerTest do
       assert json_response(conn, 201)
     end
   end
+
+  describe "update" do
+    test "happy path", %{conn: conn, user: user} do
+      team = insert(:team, owner: user)
+      new_owner = insert(:user)
+
+      body = %{
+        data: %{
+          id: team.id,
+          attributes: %{
+            name: "Burger King",
+            owner_id: new_owner.id
+          }
+        }
+      }
+      conn = patch conn, "/api/v1/teams/#{team.id}", body
+
+      assert json_response(conn, 200)
+    end
+  end
+
+  describe "delete" do
+    test "happy path", %{conn: conn, user: user} do
+      team = insert(:team, owner: user)
+
+      conn = delete conn, "/api/v1/teams/#{team.id}"
+
+      assert json_response(conn, 204)
+    end
+  end
+
+  describe "show" do
+    test "happy path", %{conn: conn, user: user} do
+      team = insert(:team, owner: user)
+
+      conn = get conn, "/api/v1/teams/#{team.id}"
+
+      assert json_response(conn, 200)
+    end
+  end
 end

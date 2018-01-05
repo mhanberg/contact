@@ -6,4 +6,8 @@ defmodule ContactWeb.Api.V1.TeamView do
     TeamSerializer
       |> JaSerializer.format(team)
   end
+
+  def render("delete.json-api", _assigns) do
+    ""
+  end
 end

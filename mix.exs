@@ -45,7 +45,8 @@ defmodule Contact.Mixfile do
       {:bcrypt_elixir, "~> 1.0"},
       {:ja_serializer, "~> 0.12.0"},
       {:ex_machina, "~> 2.1", only: :test},
-      {:guardian, "~> 1.0-beta"}
+      {:guardian, "~> 1.0-beta"},
+      {:apex, "~>1.2.0", only: [:test, :dev]}
     ]
   end
 
