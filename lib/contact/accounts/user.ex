@@ -1,7 +1,7 @@
 defmodule Contact.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Contact.Accounts.User
+  alias Contact.Accounts.{User, Team}
 
   @derive {Poison.Encoder, only: [:email, :username, :first_name, :last_name]}
   schema "users" do
@@ -12,6 +12,7 @@ defmodule Contact.Accounts.User do
     field :password, :string, virtual: true
     field :password_confirmation, :string, virtual: true
     field :password_digest
+    many_to_many :teams, Team, join_through: Member, on_delete: :delete_all, on_replace: :delete
 
     timestamps()
   end

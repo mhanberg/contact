@@ -4,7 +4,8 @@ defmodule Contact.TeamFactory do
       def team_factory do
         %Contact.Accounts.Team{
           name: sequence(:name, &"team#{&1}"),
-          owner: build(:user)
+          owner: build(:user),
+          members: [build(:user)]
         }
       end
     end

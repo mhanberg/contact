@@ -7,7 +7,8 @@ defmodule Contact.Accounts.Team do
   @derive {Poison.Encoder, only: [:name, :owner]}
   schema "teams" do
     field :name, :string
-    belongs_to :owner, Contact.Accounts.User, on_replace: :update
+    belongs_to :owner, User, on_replace: :update
+    many_to_many :members, User, join_through: Member, on_delete: :delete_all, on_replace: :delete
 
     timestamps()
   end

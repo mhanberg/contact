@@ -81,7 +81,7 @@ defmodule Contact.Accounts do
   end
 
   def get_team(id) do
-    case Team |> Repo.get(id) |> Repo.preload(:owner) do
+    case Team |> Repo.get(id) |> Repo.preload(:owner) |> Repo.preload(:members) do
       %Team{} = team ->
         team
       nil ->
@@ -107,6 +107,25 @@ defmodule Contact.Accounts do
     case Team |> Repo.get(id) do
       %Team{} = team ->
         Repo.delete(team)
+      nil ->
+        {:error, :not_found}
+    end
+  end
+
+  def add_member(team_id, user_id) do
+    team = Team |> Repo.get!(team_id) |> Repo.preload(:members)
+    user = User |> Repo.get!(user_id)
+
+    team
+    |> Ecto.Changeset.change
+    |> Ecto.Changeset.put_assoc(:members, [user])
+    |> Repo.update
+  end
+
+  def delete_member(team_id, user_id) do
+    case Member |> Repo.get_by(team_id: team_id, user_id: user_id) do
+      %Member{} = member ->
+        Repo.delete(member)
       nil ->
         {:error, :not_found}
     end
