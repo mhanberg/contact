@@ -26,7 +26,8 @@ defmodule ContactWeb.Api.V1.TeamControllerTest do
           }
         }
       }
-      conn = post conn, "/api/v1/teams", body
+
+      conn = post(conn, "/api/v1/teams", body)
 
       assert json_response(conn, 201)
     end
@@ -46,7 +47,8 @@ defmodule ContactWeb.Api.V1.TeamControllerTest do
           }
         }
       }
-      conn = patch conn, "/api/v1/teams/#{team.id}", body
+
+      conn = patch(conn, "/api/v1/teams/#{team.id}", body)
 
       assert json_response(conn, 200)
     end
@@ -56,7 +58,7 @@ defmodule ContactWeb.Api.V1.TeamControllerTest do
     test "happy path", %{conn: conn, user: user} do
       team = insert(:team, owner: user)
 
-      conn = delete conn, "/api/v1/teams/#{team.id}"
+      conn = delete(conn, "/api/v1/teams/#{team.id}")
 
       assert json_response(conn, 204)
     end
@@ -66,7 +68,7 @@ defmodule ContactWeb.Api.V1.TeamControllerTest do
     test "happy path", %{conn: conn, user: user} do
       team = insert(:team, owner: user)
 
-      conn = get conn, "/api/v1/teams/#{team.id}"
+      conn = get(conn, "/api/v1/teams/#{team.id}")
 
       assert json_response(conn, 200)
     end

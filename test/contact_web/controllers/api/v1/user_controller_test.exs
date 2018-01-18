@@ -28,13 +28,14 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
 
   describe "unauthenticated" do
     test "create happy path", %{conn: conn} do
-      conn = post conn, "/api/v1/users", @valid_body
+      conn = post(conn, "/api/v1/users", @valid_body)
 
       assert_success_result(json_response(conn, 201))
     end
 
     test "create renders 409 and error messages on invalid body", %{conn: conn} do
-      conn = post conn, "api/v1/users", %{}
+      conn = post(conn, "api/v1/users", %{})
+
       expected = %{
         "errors" => [
           %{
@@ -48,15 +49,27 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
     end
 
     test "create renders 409 and password mismatch error", %{conn: conn} do
-      conn = post conn, "api/v1/users", put_in(@valid_body.data.attributes.password_confirmation, "wrongpass")
+      conn =
+        post(
+          conn,
+          "api/v1/users",
+          put_in(@valid_body.data.attributes.password_confirmation, "wrongpass")
+        )
 
-      assert json_response(conn, 409) == %{"errors" => %{"password_confirmation" => ["does not match confirmation"]}}
+      assert json_response(conn, 409) == %{
+               "errors" => %{"password_confirmation" => ["does not match confirmation"]}
+             }
     end
 
     test "create renders 409 when email is already taken", %{conn: conn} do
       insert(:user, email: @valid_body.data.attributes.email)
 
-      conn = post conn, "/api/v1/users", put_in(@valid_body.data.attributes.username, "something different")
+      conn =
+        post(
+          conn,
+          "/api/v1/users",
+          put_in(@valid_body.data.attributes.username, "something different")
+        )
 
       assert json_response(conn, 409) == %{"errors" => %{"email" => ["has already been taken"]}}
     end
@@ -64,9 +77,16 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
     test "create renders 409 when username is already taken", %{conn: conn} do
       insert(:user, username: @valid_body.data.attributes.username)
 
-      conn = post conn, "/api/v1/users", put_in(@valid_body.data.attributes.email, "different@yep.com")
+      conn =
+        post(
+          conn,
+          "/api/v1/users",
+          put_in(@valid_body.data.attributes.email, "different@yep.com")
+        )
 
-      assert json_response(conn, 409) == %{"errors" => %{"username" => ["has already been taken"]}}
+      assert json_response(conn, 409) == %{
+               "errors" => %{"username" => ["has already been taken"]}
+             }
     end
 
     test "sign_in happy path with email", %{conn: conn} do
@@ -82,7 +102,7 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
         }
       }
 
-      conn = post conn, "/api/v1/users/sign_in", body
+      conn = post(conn, "/api/v1/users/sign_in", body)
 
       assert json_response(conn, 200)
     end
@@ -100,7 +120,7 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
         }
       }
 
-      conn = post conn, "/api/v1/users/sign_in", body
+      conn = post(conn, "/api/v1/users/sign_in", body)
 
       assert json_response(conn, 200)
     end
@@ -116,7 +136,7 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
         }
       }
 
-      conn = post conn, "/api/v1/users/sign_in", body
+      conn = post(conn, "/api/v1/users/sign_in", body)
 
       assert json_response(conn, 401)
     end
@@ -134,7 +154,7 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
         }
       }
 
-      conn = post conn, "/api/v1/users/sign_in", body
+      conn = post(conn, "/api/v1/users/sign_in", body)
 
       assert json_response(conn, 401)
     end
@@ -144,6 +164,7 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
     setup %{conn: conn} do
       user = insert(:user, email: "legoman25@aol.com", username: "legoman25")
       {:ok, token, _claims} = ContactWeb.Guardian.encode_and_sign(user)
+
       conn =
         conn
         |> put_req_header("authorization", "Bearer #{token}")
@@ -152,7 +173,10 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
     end
 
     test "update happy path", %{conn: conn, user: user} do
-      conn = patch conn, "/api/v1/users/#{user.id}", %{ "data" => %{ "id" => user.id, "attributes" => %{ first_name: "billy" }}}
+      conn =
+        patch(conn, "/api/v1/users/#{user.id}", %{
+          "data" => %{"id" => user.id, "attributes" => %{first_name: "billy"}}
+        })
 
       assert response = json_response(conn, 200)
 
@@ -177,40 +201,51 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
     test "update returns 409 when email is changed but already taken", %{conn: conn, user: user} do
       insert(:user, email: "imtaken@foo.bar")
 
-      conn = patch conn, "/api/v1/users/#{user.id}", %{ "data" => %{ "id" => user.id, "attributes" => %{"email" => "imtaken@foo.bar"}}}
+      conn =
+        patch(conn, "/api/v1/users/#{user.id}", %{
+          "data" => %{"id" => user.id, "attributes" => %{"email" => "imtaken@foo.bar"}}
+        })
 
       assert json_response(conn, 409) == %{"errors" => %{"email" => ["has already been taken"]}}
     end
 
-    test "update returns 409 when username is changed but already taken", %{conn: conn, user: user} do
+    test "update returns 409 when username is changed but already taken", %{
+      conn: conn,
+      user: user
+    } do
       insert(:user, username: "imtaken")
 
-      conn = patch conn, "/api/v1/users/#{user.id}", %{ "data" => %{ "id" => user.id, "attributes" => %{ "username" => "imtaken"}}}
+      conn =
+        patch(conn, "/api/v1/users/#{user.id}", %{
+          "data" => %{"id" => user.id, "attributes" => %{"username" => "imtaken"}}
+        })
 
-      assert json_response(conn, 409) == %{"errors" => %{"username" => ["has already been taken"]}}
+      assert json_response(conn, 409) == %{
+               "errors" => %{"username" => ["has already been taken"]}
+             }
     end
 
     test "show happy path", %{conn: conn, user: user} do
-      conn = get conn, "/api/v1/users/#{user.id}"
+      conn = get(conn, "/api/v1/users/#{user.id}")
 
       expected = UserSerializer |> JaSerializer.format(user)
       assert json_response(conn, 200) == expected
     end
 
     test "show sad path", %{conn: conn} do
-      conn = get conn, "/api/v1/users/23423515125312"
+      conn = get(conn, "/api/v1/users/23423515125312")
 
       assert json_response(conn, 404)
     end
 
     test "delete happy path", %{conn: conn, user: user} do
-      conn = delete conn, "/api/v1/users/#{user.id}"
+      conn = delete(conn, "/api/v1/users/#{user.id}")
 
       assert json_response(conn, 204)
     end
 
     test "delete sad path", %{conn: conn} do
-      conn = delete conn, "/api/v1/users/2342342423432"
+      conn = delete(conn, "/api/v1/users/2342342423432")
 
       assert json_response(conn, 404)
     end
@@ -218,17 +253,17 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
 
   defp assert_success_result(response) do
     assert %{
-      "data" => %{
-        "attributes" => %{
-          "email" => "legoman25@aol.com",
-          "username" => "legoman25",
-          "first-name" => "Mitch",
-          "last-name" => "Hanberg"
-        },
-        "type" => "user",
-        "id" => _
-      },
-      "jsonapi" => %{"version" => "1.0"}
-    } = response
+             "data" => %{
+               "attributes" => %{
+                 "email" => "legoman25@aol.com",
+                 "username" => "legoman25",
+                 "first-name" => "Mitch",
+                 "last-name" => "Hanberg"
+               },
+               "type" => "user",
+               "id" => _
+             },
+             "jsonapi" => %{"version" => "1.0"}
+           } = response
   end
 end

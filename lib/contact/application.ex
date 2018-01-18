@@ -11,7 +11,7 @@ defmodule Contact.Application do
       # Start the Ecto repository
       supervisor(Contact.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(ContactWeb.Endpoint, []),
+      supervisor(ContactWeb.Endpoint, [])
       # Start your own worker by calling: Contact.Worker.start_link(arg1, arg2, arg3)
       # worker(Contact.Worker, [arg1, arg2, arg3]),
     ]

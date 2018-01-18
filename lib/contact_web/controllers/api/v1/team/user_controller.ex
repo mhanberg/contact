@@ -1,7 +1,7 @@
 defmodule ContactWeb.Api.V1.Team.UserController do
   use ContactWeb, :controller
 
-  action_fallback ContactWeb.Api.V1.FallbackController
+  action_fallback(ContactWeb.Api.V1.FallbackController)
 
   alias Contact.{Accounts}
 

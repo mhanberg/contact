@@ -3,8 +3,8 @@ defmodule Member do
   alias Contact.Accounts.{Team, User}
 
   schema "users_teams" do
-    belongs_to :user, User
-    belongs_to :team, Team
+    belongs_to(:user, User)
+    belongs_to(:team, Team)
 
     timestamps()
   end

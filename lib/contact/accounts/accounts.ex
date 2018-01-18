@@ -25,6 +25,7 @@ defmodule Contact.Accounts do
     case User |> Repo.get(id) do
       %User{} = user ->
         user
+
       nil ->
         {:error, :not_found}
     end
@@ -34,6 +35,7 @@ defmodule Contact.Accounts do
     case User |> Repo.get_by(username: username) do
       %User{} = user ->
         user
+
       nil ->
         {:error, :not_found}
     end
@@ -43,6 +45,7 @@ defmodule Contact.Accounts do
     case User |> Repo.get_by(email: email) do
       %User{} = user ->
         user
+
       nil ->
         {:error, :not_found}
     end
@@ -52,10 +55,12 @@ defmodule Contact.Accounts do
     case get_user_by(:email, email_or_username) do
       %User{} = user ->
         user
+
       {:error, :not_found} ->
         case get_user_by(:username, email_or_username) do
           %User{} = user ->
             user
+
           {:error, :not_found} ->
             {:error, :unauthorized}
         end
@@ -66,6 +71,7 @@ defmodule Contact.Accounts do
     case User |> Repo.get(id) do
       %User{} = user ->
         Repo.delete(user)
+
       nil ->
         {:error, :not_found}
     end
@@ -75,6 +81,7 @@ defmodule Contact.Accounts do
     case Comeonin.Bcrypt.checkpw(password, user.password_digest) do
       true ->
         ContactWeb.Guardian.encode_and_sign(user)
+
       _ ->
         {:error, :unauthorized}
     end
@@ -84,6 +91,7 @@ defmodule Contact.Accounts do
     case Team |> Repo.get(id) |> Repo.preload(:owner) |> Repo.preload(:members) do
       %Team{} = team ->
         team
+
       nil ->
         {:error, :not_found}
     end
@@ -107,6 +115,7 @@ defmodule Contact.Accounts do
     case Team |> Repo.get(id) do
       %Team{} = team ->
         Repo.delete(team)
+
       nil ->
         {:error, :not_found}
     end
@@ -117,15 +126,16 @@ defmodule Contact.Accounts do
     user = User |> Repo.get!(user_id)
 
     team
-    |> Ecto.Changeset.change
+    |> Ecto.Changeset.change()
     |> Ecto.Changeset.put_assoc(:members, [user])
-    |> Repo.update
+    |> Repo.update()
   end
 
   def delete_member(team_id, user_id) do
     case Member |> Repo.get_by(team_id: team_id, user_id: user_id) do
       %Member{} = member ->
         Repo.delete(member)
+
       nil ->
         {:error, :not_found}
     end

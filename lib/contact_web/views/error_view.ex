@@ -18,7 +18,7 @@ defmodule ContactWeb.ErrorView do
   def render("400.json", _assigns) do
     %{
       errors: [
-        %{ status: 400, detail: "Bad Request" }
+        %{status: 400, detail: "Bad Request"}
       ]
     }
   end
@@ -26,7 +26,7 @@ defmodule ContactWeb.ErrorView do
   def render("401.json", _assigns) do
     %{
       errors: [
-        %{ status: 401, detail: "Unauthorized" }
+        %{status: 401, detail: "Unauthorized"}
       ]
     }
   end
@@ -34,6 +34,6 @@ defmodule ContactWeb.ErrorView do
   # In case no render clause matches or no
   # template is found, let's render it as 500
   def template_not_found(_template, assigns) do
-    render "500.json", assigns
+    render("500.json", assigns)
   end
 end

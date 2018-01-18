@@ -5,14 +5,14 @@ defmodule Contact.Accounts.User do
 
   @derive {Poison.Encoder, only: [:email, :username, :first_name, :last_name]}
   schema "users" do
-    field :email, :string
-    field :username, :string
-    field :first_name, :string
-    field :last_name, :string
-    field :password, :string, virtual: true
-    field :password_confirmation, :string, virtual: true
-    field :password_digest
-    many_to_many :teams, Team, join_through: Member, on_delete: :delete_all, on_replace: :delete
+    field(:email, :string)
+    field(:username, :string)
+    field(:first_name, :string)
+    field(:last_name, :string)
+    field(:password, :string, virtual: true)
+    field(:password_confirmation, :string, virtual: true)
+    field(:password_digest)
+    many_to_many(:teams, Team, join_through: Member, on_delete: :delete_all, on_replace: :delete)
 
     timestamps()
   end
@@ -41,6 +41,7 @@ defmodule Contact.Accounts.User do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: password}} ->
         put_change(changeset, :password_digest, Comeonin.Bcrypt.hashpwsalt(password))
+
       _ ->
         changeset
     end

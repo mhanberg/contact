@@ -27,7 +27,7 @@ defmodule Contact.AccountsTest do
     test "update_user succeeds with valid data" do
       user = insert(:user)
 
-      assert {:ok, %User{} = user} = Accounts.update_user(user.id, %{ first_name: "billy" })
+      assert {:ok, %User{} = user} = Accounts.update_user(user.id, %{first_name: "billy"})
 
       assert user.first_name == "billy"
     end
@@ -51,7 +51,7 @@ defmodule Contact.AccountsTest do
     end
 
     test "returns not found when user not found" do
-      assert {:error, :not_found} = Accounts.delete_user(34523452354)
+      assert {:error, :not_found} = Accounts.delete_user(34_523_452_354)
     end
   end
 
@@ -112,7 +112,8 @@ defmodule Contact.AccountsTest do
     test "should return mismatch if password doesn't match stored hash" do
       user = insert(:user, password_digest: Comeonin.Bcrypt.hashpwsalt("password"))
 
-      assert {:error, :unauthorized} = Accounts.authenticate(%{user: user, password: "notthepassword"})
+      assert {:error, :unauthorized} =
+               Accounts.authenticate(%{user: user, password: "notthepassword"})
     end
   end
 
@@ -127,10 +128,12 @@ defmodule Contact.AccountsTest do
 
     test "create" do
       user = insert(:user)
+
       valid_team_attrs = %{
         "name" => "Bob's Team",
         "owner_id" => user.id
       }
+
       assert {:ok, %Team{} = team} = Accounts.create_team(valid_team_attrs)
 
       assert team.name == valid_team_attrs["name"]
@@ -140,7 +143,8 @@ defmodule Contact.AccountsTest do
     test "update" do
       team = insert(:team)
 
-      assert {:ok, %Team{} = team} = Accounts.update_team(team.id, %{"owner_id" => team.owner_id, "name" => "McDonalds" })
+      assert {:ok, %Team{} = team} =
+               Accounts.update_team(team.id, %{"owner_id" => team.owner_id, "name" => "McDonalds"})
 
       assert team.name == "McDonalds"
     end

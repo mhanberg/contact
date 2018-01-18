@@ -1,13 +1,13 @@
 defmodule ContactWeb.Api.V1.TeamController do
   use ContactWeb, :controller
 
-  action_fallback ContactWeb.Api.V1.FallbackController
+  action_fallback(ContactWeb.Api.V1.FallbackController)
 
   alias Contact.{Accounts, Accounts.Team}
 
   def show(conn, %{"id" => id}) do
     with %Team{} = team <- Accounts.get_team(id) do
-      render conn, "show.json-api", team: team
+      render(conn, "show.json-api", team: team)
     end
   end
 
@@ -26,7 +26,7 @@ defmodule ContactWeb.Api.V1.TeamController do
     id = data["id"]
 
     with {:ok, %Team{} = team} <- Accounts.update_team(id, attrs) do
-      render conn, "show.json-api", team: team
+      render(conn, "show.json-api", team: team)
     end
   end
 
