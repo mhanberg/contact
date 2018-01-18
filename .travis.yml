@@ -13,4 +13,4 @@ deploy:
   run:
     - "mix ecto.migrate"
 notifications:
-  email: false
+  email: change
