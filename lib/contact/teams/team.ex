@@ -1,7 +1,8 @@
-defmodule Contact.Accounts.Team do
+defmodule Contact.Teams.Team do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Contact.Accounts.{User, Team}
+  alias Contact.Accounts.User
+  alias Contact.Teams.Team
   alias Contact.Repo
 
   @derive {Poison.Encoder, only: [:name, :owner]}

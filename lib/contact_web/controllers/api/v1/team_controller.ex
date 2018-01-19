@@ -3,10 +3,10 @@ defmodule ContactWeb.Api.V1.TeamController do
 
   action_fallback(ContactWeb.Api.V1.FallbackController)
 
-  alias Contact.{Accounts, Accounts.Team}
+  alias Contact.{Teams, Teams.Team}
 
   def show(conn, %{"id" => id}) do
-    with %Team{} = team <- Accounts.get_team(id) do
+    with %Team{} = team <- Teams.get_team(id) do
       render(conn, "show.json-api", team: team)
     end
   end
@@ -14,7 +14,7 @@ defmodule ContactWeb.Api.V1.TeamController do
   def create(conn, %{"data" => data}) do
     attrs = JaSerializer.Params.to_attributes(data)
 
-    with {:ok, %Team{} = team} <- Accounts.create_team(attrs) do
+    with {:ok, %Team{} = team} <- Teams.create_team(attrs) do
       conn
       |> put_status(201)
       |> render("show.json-api", team: team)
@@ -25,13 +25,13 @@ defmodule ContactWeb.Api.V1.TeamController do
     attrs = JaSerializer.Params.to_attributes(data)
     id = data["id"]
 
-    with {:ok, %Team{} = team} <- Accounts.update_team(id, attrs) do
+    with {:ok, %Team{} = team} <- Teams.update_team(id, attrs) do
       render(conn, "show.json-api", team: team)
     end
   end
 
   def delete(conn, %{"id" => id}) do
-    with {:ok, %Team{}} <- Accounts.delete_team(id) do
+    with {:ok, %Team{}} <- Teams.delete_team(id) do
       conn
       |> put_status(204)
       |> render("delete.json-api")

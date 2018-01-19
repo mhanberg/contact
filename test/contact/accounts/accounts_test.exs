@@ -2,7 +2,7 @@ defmodule Contact.AccountsTest do
   use Contact.DataCase
   import Contact.Factory
   alias Contact.Accounts
-  alias Contact.Accounts.{User, Team}
+  alias Contact.Accounts.User
 
   @valid_user_attrs %{
     email: "legoman25@aol.com",
@@ -114,45 +114,6 @@ defmodule Contact.AccountsTest do
 
       assert {:error, :unauthorized} =
                Accounts.authenticate(%{user: user, password: "notthepassword"})
-    end
-  end
-
-  describe "team" do
-    test "get" do
-      expected_team = insert(:team)
-
-      assert %Team{} = team = Accounts.get_team(expected_team.id)
-
-      assert expected_team == team
-    end
-
-    test "create" do
-      user = insert(:user)
-
-      valid_team_attrs = %{
-        "name" => "Bob's Team",
-        "owner_id" => user.id
-      }
-
-      assert {:ok, %Team{} = team} = Accounts.create_team(valid_team_attrs)
-
-      assert team.name == valid_team_attrs["name"]
-      assert team.owner == user
-    end
-
-    test "update" do
-      team = insert(:team)
-
-      assert {:ok, %Team{} = team} =
-               Accounts.update_team(team.id, %{"owner_id" => team.owner_id, "name" => "McDonalds"})
-
-      assert team.name == "McDonalds"
-    end
-
-    test "delete" do
-      expected_team = insert(:team)
-
-      assert {:ok, %Team{}} = Accounts.delete_team(expected_team.id)
     end
   end
 end

@@ -1,6 +1,7 @@
 defmodule Member do
   use Ecto.Schema
-  alias Contact.Accounts.{Team, User}
+  alias Contact.Accounts.User
+  alias Contact.Teams.Team
 
   schema "users_teams" do
     belongs_to(:user, User)
