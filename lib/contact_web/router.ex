@@ -44,6 +44,8 @@ defmodule ContactWeb.Router do
       resources "/teams", TeamController, only: [:create, :update, :delete, :show] do
         resources("/users", Team.UserController, only: [:create, :delete])
       end
+
+      resources("/rooms", RoomController, only: [:create, :update, :show, :delete])
     end
   end
 end

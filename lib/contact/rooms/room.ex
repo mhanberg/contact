@@ -4,6 +4,7 @@ defmodule Contact.Rooms.Room do
   alias Contact.Rooms.Room
   alias Contact.Accounts.User
 
+  @derive {Poison.Encoder, only: [:name, :owner]}
   schema "rooms" do
     field(:name, :string)
     belongs_to(:owner, User, on_replace: :nilify)

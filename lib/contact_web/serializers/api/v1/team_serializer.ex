@@ -2,8 +2,8 @@ defmodule ContactWeb.Api.V1.TeamSerializer do
   use JaSerializer
   alias ContactWeb.Api.V1.UserSerializer
 
-  location("/api/v1/team/:id")
-  attributes([:name, :owner_id])
+  location("/api/v1/teams/:id")
+  attributes([:name])
 
   has_one(
     :owner,

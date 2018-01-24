@@ -4,7 +4,7 @@ defmodule Contact.Accounts.User do
   alias Contact.Accounts.User
   alias Contact.Teams.Team
 
-  @derive {Poison.Encoder, only: [:email, :username, :first_name, :last_name]}
+  @derive {Poison.Encoder, only: [:email, :username, :first_name, :last_name, :teams]}
   schema "users" do
     field(:email, :string)
     field(:username, :string)

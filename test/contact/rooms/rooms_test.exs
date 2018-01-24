@@ -38,30 +38,27 @@ defmodule Contact.RoomsTest do
 
     test "update_room/2 with valid data updates the room" do
       room = room_fixture()
-      assert {:ok, room} = Rooms.update_room(room, update_attrs())
+
+      assert {:ok, room} = Rooms.update_room(room.id, update_attrs())
       assert %Room{} = room
       assert room.name == "some updated name"
     end
 
     test "update_room/2 with invalid data returns error changeset" do
       room = room_fixture()
-      assert {:error, %Ecto.Changeset{}} = Rooms.update_room(room, invalid_attrs())
-      assert room == Rooms.get_room!(room.id)
+      assert {:error, %Ecto.Changeset{}} = Rooms.update_room(room.id, invalid_attrs())
+      assert  Rooms.get_room!(room.id) == room
     end
 
     test "delete_room/1 deletes the room" do
       room = room_fixture()
-      assert {:ok, %Room{}} = Rooms.delete_room(room)
+      assert {:ok, %Room{}} = Rooms.delete_room(room.id)
       assert_raise Ecto.NoResultsError, fn -> Rooms.get_room!(room.id) end
     end
 
     test "change_room/1 returns a room changeset" do
       room = room_fixture()
       assert %Ecto.Changeset{} = Rooms.change_room(room)
-    end
-
-    test "see if insert(:user) works" do
-      user_fixture()
     end
   end
 end

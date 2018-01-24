@@ -3,4 +3,9 @@ defmodule ContactWeb.Api.V1.UserSerializer do
 
   location("/api/v1/users/:id")
   attributes([:email, :username, :first_name, :last_name])
+
+  has_many(
+    :teams,
+    serializer: ContactWeb.Api.V1.TeamSerializer
+  )
 end

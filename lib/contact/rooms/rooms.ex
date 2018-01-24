@@ -16,14 +16,17 @@ defmodule Contact.Rooms do
     |> Repo.insert()
   end
 
-  def update_room(%Room{} = room, attrs) do
-    room
+  def update_room(id, attrs) do
+    id
+    |> get_room!()
     |> Room.changeset(attrs)
     |> Repo.update()
   end
 
-  def delete_room(%Room{} = room) do
-    Repo.delete(room)
+  def delete_room(id) do
+    id
+    |> get_room!()
+    |> Repo.delete()
   end
 
   def change_room(%Room{} = room) do
