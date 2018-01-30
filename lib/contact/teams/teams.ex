@@ -3,6 +3,7 @@ defmodule Contact.Teams do
   alias Contact.Repo
   alias Contact.Accounts.User
   alias Contact.Teams.Team
+  alias Contact.Teams.Member
 
   def get_team(id) do
     case Team |> Repo.get(id) |> Repo.preload(:owner) |> Repo.preload(:members) do

@@ -43,10 +43,10 @@
 
 #### Members (room)
 
-- [ ] create POST /api/v1/rooms/:room\_id/users
+- [x] create POST /api/v1/rooms/:room\_id/users
 - [ ] show GET /api/v1/rooms/:room\_id/users/:id
 - [ ] update PUT /api/v1/rooms/:room\_id/users
-- [ ] delete DELETE /api/v1/rooms/:room\_id/users/:id
+- [x] delete DELETE /api/v1/rooms/:room\_id/users/:id
 - [ ] index GET /api/v1/rooms/:room\_id/users/:id
 
 #### Messaging

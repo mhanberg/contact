@@ -47,7 +47,7 @@ defmodule Contact.RoomsTest do
     test "update_room/2 with invalid data returns error changeset" do
       room = room_fixture()
       assert {:error, %Ecto.Changeset{}} = Rooms.update_room(room.id, invalid_attrs())
-      assert  Rooms.get_room!(room.id) == room
+      assert Rooms.get_room!(room.id) == room
     end
 
     test "delete_room/1 deletes the room" do

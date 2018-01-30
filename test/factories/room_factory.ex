@@ -4,7 +4,8 @@ defmodule Contact.RoomFactory do
       def room_factory do
         %Contact.Rooms.Room{
           name: sequence(:name, &"room#{&1}"),
-          owner: build(:user)
+          owner: build(:user),
+          members: [build(:user)]
         }
       end
     end

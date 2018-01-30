@@ -1,4 +1,4 @@
-defmodule Member do
+defmodule Contact.Teams.Member do
   use Ecto.Schema
   alias Contact.Accounts.User
   alias Contact.Teams.Team

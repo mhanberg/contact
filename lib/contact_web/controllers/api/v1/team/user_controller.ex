@@ -4,6 +4,7 @@ defmodule ContactWeb.Api.V1.Team.UserController do
   action_fallback(ContactWeb.Api.V1.FallbackController)
 
   alias Contact.Teams
+  alias Contact.Teams.Member
 
   def create(conn, %{"team_id" => team_id, "data" => data}) do
     %{"id" => user_id} = JaSerializer.Params.to_attributes(data)

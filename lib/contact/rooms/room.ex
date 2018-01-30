@@ -9,6 +9,14 @@ defmodule Contact.Rooms.Room do
     field(:name, :string)
     belongs_to(:owner, User, on_replace: :nilify)
 
+    many_to_many(
+      :members,
+      User,
+      join_through: Contact.Rooms.Member,
+      on_delete: :delete_all,
+      on_replace: :delete
+    )
+
     timestamps()
   end
 

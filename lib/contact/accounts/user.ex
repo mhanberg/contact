@@ -13,7 +13,14 @@ defmodule Contact.Accounts.User do
     field(:password, :string, virtual: true)
     field(:password_confirmation, :string, virtual: true)
     field(:password_digest)
-    many_to_many(:teams, Team, join_through: Member, on_delete: :delete_all, on_replace: :delete)
+
+    many_to_many(
+      :teams,
+      Team,
+      join_through: Contact.Teams.Member,
+      on_delete: :delete_all,
+      on_replace: :delete
+    )
 
     timestamps()
   end
