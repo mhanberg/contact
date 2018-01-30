@@ -3,4 +3,5 @@ defmodule Contact.Factory do
   use Contact.UserFactory
   use Contact.TeamFactory
   use Contact.RoomFactory
+  use Contact.MessageFactory
 end
