@@ -12,5 +12,3 @@ deploy:
     repo: mhanberg/contact
   run:
     - "mix ecto.migrate"
-notifications:
-  email: change
