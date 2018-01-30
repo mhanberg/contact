@@ -28,8 +28,8 @@
 #### Members (team)
 
 - [x] create POST /api/v1/teams/:team\_id/users
-- [x] show GET /api/v1/teams/:team\_id/users/:id
-- [x] update PUT /api/v1/teams/:team\_id/users
+- [ ] show GET /api/v1/teams/:team\_id/users/:id
+- [ ] update PUT /api/v1/teams/:team\_id/users
 - [x] delete DELETE /api/v1/teams/:team\_id/users/:id
 - [ ] index GET /api/v1/teams/:team\_id/users/:id
 
