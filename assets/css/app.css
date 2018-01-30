@@ -1,1 +1,10 @@
 /* This file is for your main application css. */
+
+#logo {
+  font-family: 'Dancing Script', cursive;
+  font-size: 85px;
+}
+
+#plane {
+  font-size: 55px;
+}
