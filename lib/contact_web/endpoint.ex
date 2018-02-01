@@ -46,6 +46,7 @@ defmodule ContactWeb.Endpoint do
     signing_salt: "kwxQLNmQ"
   )
 
+  plug(CORSPlug)
   plug(ContactWeb.Router)
 
   @doc """
