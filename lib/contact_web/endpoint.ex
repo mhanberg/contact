@@ -3,6 +3,7 @@ defmodule ContactWeb.Endpoint do
 
   socket("/socket", ContactWeb.UserSocket)
 
+  plug(Plug.Static.IndexHtml, at: "/")
   # Serve at "/" the static files from "priv/static" directory.
   #
   # You should set gzip to true if you are running phoenix.digest
@@ -10,9 +11,8 @@ defmodule ContactWeb.Endpoint do
   plug(
     Plug.Static,
     at: "/",
-    from: :contact,
-    gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    from: "priv/contact-react/build/",
+    only: ~w(index.html favicon.ico static service-worker.js)
   )
 
   # Code reloading can be explicitly enabled under the
