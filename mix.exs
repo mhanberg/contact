@@ -46,7 +46,8 @@ defmodule Contact.Mixfile do
       {:ja_serializer, "~> 0.12.0"},
       {:ex_machina, "~> 2.1", only: :test},
       {:guardian, "~> 1.0-beta"},
-      {:apex, "~>1.2.0", only: [:test, :dev]}
+      {:apex, "~>1.2.0", only: [:test, :dev]},
+      {:plug_static_index_html, "~> 1.0"}
     ]
   end
 
