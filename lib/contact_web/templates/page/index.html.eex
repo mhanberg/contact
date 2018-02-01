@@ -1,7 +1,0 @@
-<div class="jumbotron">
-  <div id="logo">Contact <i id="plane" class="fa fa-paper-plane-o" aria-hidden="true"></i></div>
-  <p class="lead">A minimal chat application that keeps you in contact with your friends and family.</p>
-  <hr>
-  <p><i style="color: darkorange" class="fa fa-exclamation-triangle" aria-hidden="true"></i> Currently under construction <i style="color: darkorange" class="fa fa-exclamation-triangle" aria-hidden="true"></i></p>
-</div>
-

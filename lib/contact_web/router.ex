@@ -1,14 +1,6 @@
 defmodule ContactWeb.Router do
   use ContactWeb, :router
 
-  pipeline :browser do
-    plug(:accepts, ["html"])
-    plug(:fetch_session)
-    plug(:fetch_flash)
-    plug(:protect_from_forgery)
-    plug(:put_secure_browser_headers)
-  end
-
   pipeline :api do
     plug(:accepts, ["json-api"])
     plug(JaSerializer.ContentTypeNegotiation)
@@ -17,13 +9,6 @@ defmodule ContactWeb.Router do
 
   pipeline :api_auth do
     plug(ContactWeb.Guardian.AuthPipeline)
-  end
-
-  scope "/", ContactWeb do
-    # Use the default browser stack
-    pipe_through(:browser)
-
-    get("/", PageController, :index)
   end
 
   scope "/api", ContactWeb.Api do

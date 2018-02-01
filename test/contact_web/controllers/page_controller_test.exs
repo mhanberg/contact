@@ -1,8 +1,0 @@
-defmodule ContactWeb.PageControllerTest do
-  use ContactWeb.ConnCase
-
-  test "GET /", %{conn: conn} do
-    conn = get(conn, "/")
-    assert html_response(conn, 200) =~ "Contact"
-  end
-end
