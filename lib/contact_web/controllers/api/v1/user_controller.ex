@@ -58,9 +58,9 @@ defmodule ContactWeb.Api.V1.UserController do
 
     with %User{} = user <- Accounts.find(login_cred.login) do
       with {:ok, token, _claims} <-
-             Accounts.authenticate(%{user: user, password: login_cred.password}) do
-        render(conn, "token.json-api", token: token)
-      end
+        Accounts.authenticate(%{user: user, password: login_cred.password}) do
+          render(conn, "token.json-api", token: token)
+        end
     end
   end
 end
