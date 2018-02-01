@@ -13,7 +13,6 @@ import {
   Button
 } from 'react-bootstrap';
 
-import * as session from '../util/session';
 class Login extends React.Component {
   constructor(props) {
     super(props)
