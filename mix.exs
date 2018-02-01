@@ -48,7 +48,7 @@ defmodule Contact.Mixfile do
       {:guardian, "~> 1.0-beta"},
       {:apex, "~>1.2.0", only: [:test, :dev]},
       {:plug_static_index_html, "~> 1.0"},
-      {:cors_plug, "~> 1.2", only: :dev}
+      {:cors_plug, "~> 1.2"}
     ]
   end
 
