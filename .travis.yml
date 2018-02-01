@@ -10,6 +10,7 @@ deploy:
   provider: heroku
   api_key:
     secure: lYWGZ/XxuLF8N+3LnwSJMs+cpf3eOTZJacY2bjYg7ZSRsOCn7Y2plyqepljJ7IO5+9/BksH97JpkZbzNLPcoZqO7mxfW0lmoyyucAinZIU4B/WyK4/E3BUZ186IzK3dFGvldtUqrdP6qnWqtkFfDT6jzErBhRzwuDkWQJgSZTYKf8at2iZE5Mn+iDfOAi8zTn0WiPBvkE0U0ju9PuZ5J0hp22KOjhyTvpqQ2Lb9/f2yAQswujmwI9zVKDxcQk3uTVT37H50ZOnJVEdGoICPDDZ3Tr5tw6BnCKNSqL3VlPrKiR6et8Bb7pjIOch15n2LcixBuX08CGxazWBkKlzv2jS1tf9E/cnR/nSflWZX+6Ra6ojVGoF5M2Mtm+Gw/IbiAZI6/Uyn7SYRznjGRn43+/y9uWL5lZoH5W3pkiZp89dKUTjCT0KXZsWTCj5zkSglePufWFFvQkyGWcVF8dqiMx1ebe8jkYTCQ91oNo3nfv/76U6JnrLaRncPYbDXrIiJtN39Kfz/JTTHun7ut3vZZtZCsMfMbB8/9GndH+9/H5zTlpv+323thhBjJ2HTNAnRG+Gq0uWmh2n5uoG0LjoIY4/f24zrRsEZllskfUOzUpYGV4+iVebupfwSK55u0KBP/Zhyge7FTjn9k0lYvhKvWr5rdCZANjE7uGnU1iBgE8bY=
+  skip_cleanup: true
   app: quiet-atoll-83762
   on:
     repo: mhanberg/contact
