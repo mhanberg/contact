@@ -1,16 +1,24 @@
 const sessionKey = 'contact-react-session';
 
 function putSession(token) {
-  console.log('in putSession');
   localStorage.setItem(sessionKey, token);
 }
 
 function getSession() {
-  console.log('in getSession');
-  localStorage.getItem(sessionKey);
+  return localStorage.getItem(sessionKey);
+}
+
+function destroySession() {
+  localStorage.removeItem(sessionKey);
+}
+
+function isLoggedIn() {
+  return !!getSession();
 }
 
 export {
   putSession,
-  getSession
+  getSession,
+  destroySession,
+  isLoggedIn
 }

@@ -1,6 +1,6 @@
 import React from 'react';
+import {putSession} from '../util/session';
 import request from 'superagent';
-import {snakeCase} from 'change-case';
 import {
   FormGroup,
   FormControl,
@@ -8,7 +8,6 @@ import {
   Row,
   Col,
   Panel,
-  PageHeader,
   HelpBlock,
   Button
 } from 'react-bootstrap';
@@ -18,103 +17,68 @@ class Login extends React.Component {
     super(props)
 
     this.state = {
-      email: '',
-      username: '',
-      firstName: '',
-      lastName: '',
-      password: '',
-      passwordConfirmation: '',
+      login: '',
+      password: ''
     }
   }
-
-  token = resp => resp.body.attributes.token;
 
   handleChange = key => {
     return  event => {
       this.setState({[key]: event.target.value});
     }
   }
+  
+  submitOnEnter = (e) => e.key === 'Enter' && this.login();
 
-  signUp = () => {
+  login = () => {
     this.setState({isLoading: true});
     const{
-      email,
-      username,
-      firstName,
-      lastName,
-      password,
-      passwordConfirmation
+      login,
+      password
     } = this.state;
 
     request
-      .post('/api/v1/users')
+      .post('/api/v1/users/sign_in')
       .set('accept', 'application/vnd.api+json')
       .set('content-type', 'application/vnd.api+json')
       .send({
         data: {
           type: "users",
           attributes: {
-            email,
-            username,
-            first_name: firstName,
-            last_name: lastName,
-            password,
-            password_confirmation: passwordConfirmation
+            login,
+            password
           }
         }
       })
       .then(resp => {
-        alert('success!');
-        console.log(resp);
+        putSession(resp.body.data.attributes.token);
         this.setState({isLoading: false});
+        this.props.handleAuthClick();
       })
       .catch(err => {
-        alert(JSON.stringify(err.response.body.errors));
-        console.log(err.response);
-
-        this.setState({isLoading: false, validationState: 'error', errors: err.response.body.errors});
+        this.setState({isLoading: false, validationState: 'error', errors: 'Login/password is incorrect'});
       });
   }
-
-  error = error => this.state.errors && this.state.errors[snakeCase(error)] && this.state.errors[snakeCase(error)][0];
 
   render() {
     return(
       <Row>
-        <PageHeader>Welcome to Contact! <small>Sign Up</small></PageHeader>
         <Col xs={12} lg={6} lgOffset={3}>
           <Panel>
-            <Panel.Heading>Sign Up</Panel.Heading>
+            <Panel.Heading>Login</Panel.Heading>
             <Panel.Body>
               <FormGroup validationState={this.state.validationState}>
-                <ControlLabel>Email</ControlLabel>
-                <FormControl value={this.state.email} type='email' placeholder="Email" onChange={this.handleChange('email')} /> 
-                <HelpBlock> {this.error('email')} </HelpBlock>
-
-                <ControlLabel>Username</ControlLabel>
-                <FormControl value={this.state.username} placeholder="Username" onChange={this.handleChange('username')} /> 
-                <HelpBlock> {this.error('username')} </HelpBlock>
-
-                <ControlLabel>First Name</ControlLabel>
-                <FormControl value={this.state.firstName} placeholder="First Name" onChange={this.handleChange('firstName')} /> 
-                <HelpBlock> {this.error('firstName')} </HelpBlock>
-
-                <ControlLabel>Last Name</ControlLabel>
-                <FormControl value={this.state.lastName} placeholder="Last Name" onChange={this.handleChange('lastName')} /> 
-                <HelpBlock> {this.error('lastName')} </HelpBlock>
+                <ControlLabel>Login</ControlLabel>
+                <FormControl onKeyPress={this.submitOnEnter} value={this.state.login}  placeholder="Email or Username" onChange={this.handleChange('login')} /> 
 
                 <ControlLabel>Password</ControlLabel>
-                <FormControl value={this.state.password} type='password' placeholder="Password" onChange={this.handleChange('password')} /> 
-                <HelpBlock> {this.error('password')} </HelpBlock>
-
-                <ControlLabel>Password Confirmation</ControlLabel>
-                <FormControl value={this.state.passwordConfirmation} type='password' placeholder="Password Confirmation" onChange={this.handleChange('passwordConfirmation')} /> 
-                <HelpBlock> {this.error('passwordConfirmation')} </HelpBlock>
+                <FormControl onKeyPress={this.submitOnEnter} value={this.state.password} type='password' placeholder="Password" onChange={this.handleChange('password')} /> 
+                <HelpBlock> {this.state.errors} </HelpBlock>
 
                 <Button 
-                  onClick={this.state.isLoading ? null : this.signUp}
+                  onClick={this.state.isLoading ? null : this.login}
                   disabled={this.state.isLoading}>
-                  {this.state.isLoading ? 'Loading...' : 'Sign up!'}
+                  {this.state.isLoading ? 'Loading...' : 'Login'}
                 </Button>
               </FormGroup>
             </Panel.Body>
