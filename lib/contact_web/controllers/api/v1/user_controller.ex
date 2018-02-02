@@ -47,14 +47,9 @@ defmodule ContactWeb.Api.V1.UserController do
   def sign_in(conn, %{"data" => data}) do
     attrs = JaSerializer.Params.to_attributes(data)
 
-    login_cred =
-      case attrs do
-        %{"username" => username, "password" => password} ->
-          %{login: username, password: password}
+    %{"login" => login, "password" => password} = attrs
 
-        %{"email" => email, "password" => password} ->
-          %{login: email, password: password}
-      end
+    login_cred = %{login: login, password: password}
 
     with %User{} = user <- Accounts.find(login_cred.login) do
       with {:ok, token, _claims} <-

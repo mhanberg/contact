@@ -96,7 +96,7 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
         data: %{
           type: "token",
           attributes: %{
-            email: "legoman25@aol.com",
+            login: "legoman25@aol.com",
             password: "password"
           }
         }
@@ -114,7 +114,7 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
         data: %{
           type: "token",
           attributes: %{
-            email: "legoman25",
+            login: "legoman25",
             password: "password"
           }
         }
@@ -130,7 +130,7 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
         data: %{
           type: "token",
           attributes: %{
-            email: "doesntexist",
+            login: "doesntexist",
             password: "doesntmatter"
           }
         }
@@ -148,7 +148,7 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
         data: %{
           type: "token",
           attributes: %{
-            username: "legoman25",
+            login: "legoman25",
             password: "doesntmatch"
           }
         }
