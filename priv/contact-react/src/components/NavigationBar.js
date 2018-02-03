@@ -11,8 +11,10 @@ import {
 } from '../util/session'
 
 const logOut = callback => {
-  destroySession();
-  return callback;
+  return () => {
+    destroySession();
+    callback();
+  }
 }
 const NavOptions = (handleClick) => {
   return isLoggedIn()
