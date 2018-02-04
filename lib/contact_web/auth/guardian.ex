@@ -5,7 +5,8 @@ defmodule ContactWeb.Guardian do
     {:ok, to_string(resource.id)}
   end
 
-  def resource_from_claims(_claims) do
-    {:ok, :ok}
+  def resource_from_claims(claims) do
+    resource = Contact.Accounts.get_user(claims["sub"])
+    {:ok, resource}
   end
 end

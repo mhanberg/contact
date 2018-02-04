@@ -11,7 +11,7 @@ defmodule ContactWeb.Api.V1.UserView do
     ""
   end
 
-  def render("token.json-api", token) do
+  def render("token.json-api", %{token: token}) do
     TokenSerializer
     |> JaSerializer.format(token)
   end
