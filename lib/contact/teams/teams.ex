@@ -18,7 +18,10 @@ defmodule Contact.Teams do
   def create_team(attrs) do
     changeset = %Team{} |> Team.changeset(attrs)
 
-    Repo.insert(changeset)
+    {:ok, team} = Repo.insert(changeset)
+    add_member(team.id, team.owner_id)
+
+    {:ok, team}
   end
 
   def update_team(id, attrs) do
