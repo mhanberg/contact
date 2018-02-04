@@ -6,6 +6,17 @@ defmodule ContactWeb.Api.V1.UserSerializer do
 
   has_many(
     :teams,
+    include: true,
     serializer: ContactWeb.Api.V1.TeamSerializer
   )
+
+  def teams(struct, conn) do
+    case struct.teams do
+      %Ecto.Association.NotLoaded{} ->
+        struct
+        |> Ecto.assoc(:teams)
+        |> Contact.Repo.all
+      other -> other
+    end
+  end
 end

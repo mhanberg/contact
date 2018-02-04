@@ -191,7 +191,7 @@ defmodule ContactWeb.Api.V1.UserControllerTest do
           "type" => "user",
           "id" => "#{user.id}",
           "links" => %{"self" => "/api/v1/users/#{user.id}"},
-          "relationships" => %{"teams" => %{}}
+          "relationships" => %{"teams" => %{"data" => []}}
         },
         "jsonapi" => %{"version" => "1.0"}
       }
