@@ -1,6 +1,7 @@
 import React from 'react';
 import {Alert} from 'react-bootstrap';
-import {isLoggedIn} from './util/session';
+import request from 'superagent';
+import {isLoggedIn, getSession} from './util/session';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
 import NavigationBar from './components/NavigationBar';
@@ -14,6 +15,25 @@ class App extends React.Component {
       route: 'login',
       loggedIn: isLoggedIn(),
       alert: false
+    }
+  }
+
+  componentDidMount() {
+    if (this.state.loggedIn) {
+      request
+        .get('/api/v1/users/self')
+        .accept('application/vnd.api+json')
+        .type('application/vnd.api+json')
+        .set('authorization', `Bearer ${getSession()}`)
+        .then(resp => {
+          this.setState({
+            user: {...resp.body.data.attributes},
+            teams: resp.body.included.map(team => {
+              return {...team.attributes};
+            })
+          });
+        })
+        .catch(err => console.log(err));
     }
   }
 
