@@ -68,7 +68,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <NavigationBar handleAuthClick={this.handleAuthClick}></NavigationBar>
+        <NavigationBar teams={this.state.teams} handleAuthClick={this.handleAuthClick}></NavigationBar>
         <div className="container">
           {this.state.alert && this.alert()}
           {this.route()}

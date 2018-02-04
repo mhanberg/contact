@@ -2,6 +2,8 @@ import React from 'react';
 import {
   Navbar,
   Nav,
+  NavDropdown,
+  MenuItem,
   NavItem
 } from 'react-bootstrap';
 
@@ -16,9 +18,9 @@ const logOut = callback => {
     callback();
   }
 }
-const NavOptions = (handleClick) => {
+const NavOptions = (handleClick, teams) => {
   return isLoggedIn()
-    ? loggedInOptions(handleClick)
+    ? loggedInOptions(handleClick, teams)
     : loggedOutOptions(handleClick); 
 }
 const loggedOutOptions = (handleAuthClick) => {
@@ -33,11 +35,24 @@ const loggedOutOptions = (handleAuthClick) => {
     </Nav>
   );
 }
-const loggedInOptions = (handleAuthClick) => {
-  return <Nav pullRight><NavItem eventKey={1} onClick={logOut(handleAuthClick('login'))}>Log out</NavItem></Nav>;
+
+const renderTeams = (teams) => {
+  return teams &&
+    teams.map(team => <MenuItem key={team.name}>{team.name}</MenuItem>);
+}
+
+const loggedInOptions = (handleAuthClick, teams) => {
+  return (
+    <Nav pullRight>
+      <NavDropdown eventKey={2} title="Teams">
+        {renderTeams(teams)}
+      </NavDropdown>
+      <NavItem eventKey={1} onClick={logOut(handleAuthClick('login'))}>Log out</NavItem>
+    </Nav>
+  );
 }
 const NavigationBar = (props) => {
-  const {handleAuthClick} = props;
+  const {handleAuthClick, teams} = props;
 
   return(
     <Navbar inverse collapseOnSelect>
@@ -48,7 +63,7 @@ const NavigationBar = (props) => {
         <Navbar.Toggle />
       </Navbar.Header>
       <Navbar.Collapse>
-        {NavOptions(handleAuthClick)}
+        {NavOptions(handleAuthClick, teams)}
       </Navbar.Collapse>
     </Navbar>
   );
