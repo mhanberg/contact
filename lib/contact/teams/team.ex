@@ -4,10 +4,11 @@ defmodule Contact.Teams.Team do
   alias Contact.Accounts.User
   alias Contact.Teams.Team
 
-  @derive {Poison.Encoder, only: [:name, :owner]}
+  @derive {Poison.Encoder, only: [:name, :owner, :rooms]}
   schema "teams" do
     field(:name, :string)
     belongs_to(:owner, User, on_replace: :nilify)
+    has_many(:rooms, Contact.Rooms.Room, on_delete: :delete_all)
 
     many_to_many(
       :members,

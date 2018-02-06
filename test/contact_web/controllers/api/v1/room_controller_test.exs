@@ -17,12 +17,15 @@ defmodule ContactWeb.Api.V1.RoomControllerTest do
 
   describe "create" do
     test "happy path", %{conn: conn, user: user} do
+      team = insert(:team)
+
       body = %{
         data: %{
           type: "rooms",
           attributes: %{
             name: "general",
-            owner_id: user.id
+            owner_id: user.id,
+            team_id: team.id
           }
         }
       }
@@ -43,7 +46,8 @@ defmodule ContactWeb.Api.V1.RoomControllerTest do
           id: room.id,
           attributes: %{
             name: "Burger King",
-            owner_id: new_owner.id
+            owner_id: new_owner.id,
+            team_id: room.team_id
           }
         }
       }

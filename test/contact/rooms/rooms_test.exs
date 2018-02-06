@@ -5,8 +5,11 @@ defmodule Contact.RoomsTest do
   alias Contact.Rooms.Room
 
   describe "rooms" do
-    def valid_attrs(), do: %{"name" => "some name", "owner_id" => user_fixture().id}
-    def update_attrs(), do: %{"name" => "some updated name", "owner_id" => user_fixture().id}
+    def valid_attrs(), do: %{"name" => "some name", "owner_id" => user_fixture().id, "team_id" => team_fixture().id}
+
+    def update_attrs(),
+      do: %{"name" => "some updated name", "owner_id" => user_fixture().id, "team_id" => team_fixture().id}
+
     def invalid_attrs(), do: %{name: nil}
 
     def room_fixture(attrs \\ %{}) do
@@ -17,14 +20,18 @@ defmodule Contact.RoomsTest do
       insert(:user)
     end
 
+    def team_fixture() do
+      insert(:team)
+    end
+
     test "list_rooms/0 returns all rooms" do
-      room = room_fixture()
-      assert Rooms.list_rooms() == [room]
+      room_fixture()
+      assert length(Rooms.list_rooms()) == 1
     end
 
     test "get_room!/1 returns the room with given id" do
       room = room_fixture()
-      assert Rooms.get_room!(room.id) == room
+      assert Rooms.get_room!(room.id).id == room.id
     end
 
     test "create_room/1 with valid data creates a room" do
@@ -33,7 +40,7 @@ defmodule Contact.RoomsTest do
     end
 
     test "create_room/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Rooms.create_room(invalid_attrs())
+      assert {:error, _} = Rooms.create_room(invalid_attrs())
     end
 
     test "update_room/2 with valid data updates the room" do
@@ -47,7 +54,7 @@ defmodule Contact.RoomsTest do
     test "update_room/2 with invalid data returns error changeset" do
       room = room_fixture()
       assert {:error, %Ecto.Changeset{}} = Rooms.update_room(room.id, invalid_attrs())
-      assert Rooms.get_room!(room.id) == room
+      assert Rooms.get_room!(room.id).id == room.id
     end
 
     test "delete_room/1 deletes the room" do

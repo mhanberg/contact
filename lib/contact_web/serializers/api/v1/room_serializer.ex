@@ -6,16 +6,37 @@ defmodule ContactWeb.Api.V1.RoomSerializer do
 
   has_one(
     :owner,
+    include: true,
     serializer: ContactWeb.Api.V1.UserSerializer
   )
 
-  def owner(struct, conn) do
+  has_one(
+    :team,
+    include: true,
+    serializer: ContactWeb.Api.V1.TeamSerializer
+  )
+
+  def owner(struct, _conn) do
     case struct.owner do
       %Ecto.Association.NotLoaded{} ->
         struct
         |> Ecto.assoc(:owner)
-        |> Contact.Repo.all
-      other -> other
+        |> Contact.Repo.all()
+
+      other ->
+        other
+    end
+  end
+
+  def team(struct, _conn) do
+    case struct.team do
+      %Ecto.Association.NotLoaded{} ->
+        struct
+        |> Ecto.assoc(:team)
+        |> Contact.Repo.all()
+
+      other ->
+        other
     end
   end
 end

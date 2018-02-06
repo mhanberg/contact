@@ -24,7 +24,9 @@ defmodule ContactWeb.Router do
     pipe_through([:api, :api_auth])
 
     scope "/v1", V1 do
-      resources("/users", UserController, only: [:update, :show, :delete])
+      resources "/users", UserController, only: [:update, :show, :delete] do
+        get("/teams/:team_id/rooms", User.Team.RoomController, :index)
+      end
 
       resources "/teams", TeamController, only: [:create, :update, :delete, :show] do
         resources("/users", Team.UserController, only: [:create, :delete])

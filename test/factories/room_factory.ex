@@ -5,6 +5,7 @@ defmodule Contact.RoomFactory do
         %Contact.Rooms.Room{
           name: sequence(:name, &"room#{&1}"),
           owner: build(:user),
+          team: build(:team),
           members: [build(:user)]
         }
       end

@@ -7,15 +7,31 @@ defmodule Contact.Rooms do
   alias Contact.Rooms.Member
 
   def list_rooms do
-    Repo.all(Room) |> Repo.preload(:owner) |> Repo.preload(:members)
+    Repo.all(Room) |> Repo.preload(:owner) |> Repo.preload(:members) |> Repo.preload(:team)
   end
 
-  def get_room!(id), do: Repo.get!(Room, id) |> Repo.preload(:owner) |> Repo.preload(:members)
+  def get_room!(id), do: Repo.get!(Room, id) |> Repo.preload(:owner) |> Repo.preload(:members) |> Repo.preload(:team)
+
+  def get_rooms_for_user_and_team(user_id, team_id) do
+    Contact.Repo.all(
+      from(
+        r in Contact.Rooms.Room,
+        join: t in assoc(r, :team),
+        join: m in assoc(r, :members),
+        where: t.id == ^team_id and m.id == ^user_id
+      )
+    )
+  end
 
   def create_room(attrs \\ %{}) do
-    %Room{}
-    |> Room.changeset(attrs)
-    |> Repo.insert()
+    case result = %Room{} |> Room.changeset(attrs) |> Repo.insert() do
+      {:ok, room} ->
+        add_member(room.id, room.owner_id)
+        {:ok, room}
+
+      _ ->
+        result
+    end
   end
 
   def update_room(id, attrs) do
