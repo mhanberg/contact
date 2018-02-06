@@ -112,8 +112,7 @@ defmodule Contact.AccountsTest do
     test "should return mismatch if password doesn't match stored hash" do
       user = insert(:user, password_digest: Comeonin.Bcrypt.hashpwsalt("password"))
 
-      assert {:error, :unauthorized} =
-               Accounts.authenticate(%{user: user, password: "notthepassword"})
+      assert {:error, :unauthorized} = Accounts.authenticate(%{user: user, password: "notthepassword"})
     end
   end
 end

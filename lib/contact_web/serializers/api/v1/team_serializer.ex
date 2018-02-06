@@ -21,8 +21,10 @@ defmodule ContactWeb.Api.V1.TeamSerializer do
       %Ecto.Association.NotLoaded{} ->
         struct
         |> Ecto.assoc(:owner)
-        |> Contact.Repo.all
-      other -> other
+        |> Contact.Repo.all()
+
+      other ->
+        other
     end
   end
 
@@ -31,8 +33,10 @@ defmodule ContactWeb.Api.V1.TeamSerializer do
       %Ecto.Association.NotLoaded{} ->
         struct
         |> Ecto.assoc(:members)
-        |> Contact.Repo.all
-      other -> other
+        |> Contact.Repo.all()
+
+      other ->
+        other
     end
   end
 end

@@ -29,8 +29,7 @@ defmodule Contact.TeamsTest do
     test "update" do
       team = insert(:team)
 
-      assert {:ok, %Team{} = team} =
-               Teams.update_team(team.id, %{"owner_id" => team.owner_id, "name" => "McDonalds"})
+      assert {:ok, %Team{} = team} = Teams.update_team(team.id, %{"owner_id" => team.owner_id, "name" => "McDonalds"})
 
       assert team.name == "McDonalds"
     end

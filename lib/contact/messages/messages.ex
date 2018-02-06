@@ -8,8 +8,7 @@ defmodule Contact.Messages do
     Repo.all(Message) |> Repo.preload(:sender) |> Repo.preload(room: [:owner, :members])
   end
 
-  def get_message!(id),
-    do: Repo.get!(Message, id) |> Repo.preload(:sender) |> Repo.preload(room: [:owner, :members])
+  def get_message!(id), do: Repo.get!(Message, id) |> Repo.preload(:sender) |> Repo.preload(room: [:owner, :members])
 
   def create_message(attrs \\ %{}) do
     %Message{}
