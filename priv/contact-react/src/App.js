@@ -5,6 +5,7 @@ import {isLoggedIn, getSession} from './util/session';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
 import NavigationBar from './components/NavigationBar';
+import Home from './components/Home';
 import './App.css';
 
 class App extends React.Component {
@@ -20,21 +21,37 @@ class App extends React.Component {
 
   componentDidMount() {
     if (this.state.loggedIn) {
-      request
-        .get('/api/v1/users/self')
-        .accept('application/vnd.api+json')
-        .type('application/vnd.api+json')
-        .set('authorization', `Bearer ${getSession()}`)
-        .then(resp => {
-          this.setState({
-            user: {...resp.body.data.attributes},
-            teams: resp.body.included.map(team => {
-              return {...team.attributes};
-            })
-          });
-        })
-        .catch(err => console.log(err));
+      this.getUserAndTeams();
     }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevState.loggedIn && prevState.loggedIn !== this.state.loggedIn) {
+      this.getUserAndTeams();
+    }
+  }
+
+  getUserAndTeams = () => {
+    request
+      .get('/api/v1/users/self')
+      .accept('application/vnd.api+json')
+      .type('application/vnd.api+json')
+      .set('authorization', `Bearer ${getSession()}`)
+      .then(resp => {
+        const teams = resp.body.included.map(team => {
+          return {...team.attributes, id: team.id};
+        });
+        const user = {...resp.body.data.attributes, id: resp.body.data.id};
+        const currentTeam = teams[0];
+
+        this.setState({
+          user,
+          teams,
+          currentTeam
+        });
+      })
+      .catch(err => console.log(err));
+
   }
 
   alert = () => {
@@ -60,15 +77,16 @@ class App extends React.Component {
     const noAuthRoute = this.state.route === 'login'
       ? <Login handleAuthClick={this.handleAuthClick('home')}/>
       : <SignUp setAlert={this.setAlert} handleAuthClick={this.handleAuthClick('login')}/>;
+    const {user, currentTeam} = this.state;
     return isLoggedIn()
-      ? <div>You'e logged in!</div> 
+      ? <Home user={user && user.id} team={currentTeam && currentTeam.id}/> 
       : noAuthRoute;
   }
 
   render() {
     return (
       <div>
-        <NavigationBar teams={this.state.teams} handleAuthClick={this.handleAuthClick}></NavigationBar>
+        <NavigationBar currentTeam={this.state.currentTeam || {name: ''}} teams={this.state.teams} handleAuthClick={this.handleAuthClick}></NavigationBar>
         <div className="container">
           {this.state.alert && this.alert()}
           {this.route()}

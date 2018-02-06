@@ -18,9 +18,9 @@ const logOut = callback => {
     callback();
   }
 }
-const NavOptions = (handleClick, teams) => {
+const NavOptions = (handleClick, teams, currentTeam) => {
   return isLoggedIn()
-    ? loggedInOptions(handleClick, teams)
+    ? loggedInOptions(handleClick, teams, currentTeam)
     : loggedOutOptions(handleClick); 
 }
 const loggedOutOptions = (handleAuthClick) => {
@@ -41,10 +41,10 @@ const renderTeams = (teams) => {
     teams.map(team => <MenuItem key={team.name}>{team.name}</MenuItem>);
 }
 
-const loggedInOptions = (handleAuthClick, teams) => {
+const loggedInOptions = (handleAuthClick, teams, currentTeam) => {
   return (
     <Nav pullRight>
-      <NavDropdown eventKey={2} title="Teams">
+      <NavDropdown id="teamDropDown" eventKey={2} title={currentTeam.name}>
         {renderTeams(teams)}
       </NavDropdown>
       <NavItem eventKey={1} onClick={logOut(handleAuthClick('login'))}>Log out</NavItem>
@@ -52,7 +52,11 @@ const loggedInOptions = (handleAuthClick, teams) => {
   );
 }
 const NavigationBar = (props) => {
-  const {handleAuthClick, teams} = props;
+  const {
+    handleAuthClick, 
+    teams,
+    currentTeam
+  } = props;
 
   return(
     <Navbar inverse collapseOnSelect>
@@ -63,7 +67,7 @@ const NavigationBar = (props) => {
         <Navbar.Toggle />
       </Navbar.Header>
       <Navbar.Collapse>
-        {NavOptions(handleAuthClick, teams)}
+        {NavOptions(handleAuthClick, teams, currentTeam)}
       </Navbar.Collapse>
     </Navbar>
   );
