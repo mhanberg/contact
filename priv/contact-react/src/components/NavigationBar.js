@@ -13,15 +13,16 @@ import {
   destroySession
 } from '../util/session'
 
-const logOut = callback => {
+const logOut = (callback, resetState)  => {
   return () => {
     destroySession();
+    resetState();
     callback();
   }
 }
-const NavOptions = (handleClick, teams, currentTeam, setCurrentTeam, openCreateTeamModal) => {
+const NavOptions = (handleClick, teams, currentTeam, setCurrentTeam, openCreateTeamModal, resetState) => {
   return isLoggedIn()
-    ? loggedInOptions(handleClick, teams, currentTeam, setCurrentTeam, openCreateTeamModal)
+    ? loggedInOptions(handleClick, teams, currentTeam, setCurrentTeam, openCreateTeamModal, resetState)
     : loggedOutOptions(handleClick); 
 }
 const loggedOutOptions = (handleAuthClick) => {
@@ -65,6 +66,7 @@ const NavigationBar = (props) => {
     teams,
     currentTeam,
     setCurrentTeam,
+    resetState,
     openCreateTeamModal
   } = props;
 
@@ -77,7 +79,7 @@ const NavigationBar = (props) => {
         <Navbar.Toggle />
       </Navbar.Header>
       <Navbar.Collapse>
-        {NavOptions(handleAuthClick, teams, currentTeam, setCurrentTeam, openCreateTeamModal)}
+        {NavOptions(handleAuthClick, teams, currentTeam, setCurrentTeam, openCreateTeamModal, resetState)}
       </Navbar.Collapse>
     </Navbar>
   );

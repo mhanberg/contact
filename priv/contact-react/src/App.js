@@ -13,14 +13,17 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
+    this.initialState = {
       route: 'login',
       loggedIn: isLoggedIn(),
-      currentTeam: {name: ''},
+      currentTeam: null, 
       teams: [],
       alert: false,
-      showCreateTeamModal: false
-    }
+      showCreateTeamModal: false,
+      user: null
+    };
+
+    this.state = {...this.initialState};
   }
 
   componentDidMount() {
@@ -33,6 +36,10 @@ class App extends React.Component {
     if (!prevState.loggedIn && prevState.loggedIn !== this.state.loggedIn) {
       this.getUserAndTeams();
     }
+  }
+
+  resetState = () => {
+    this.setState(this.initialState);
   }
 
   getUserAndTeams = () => {
@@ -108,7 +115,8 @@ class App extends React.Component {
           setCurrentTeam={this.setCurrentTeam}
           teams={this.state.teams}
           handleAuthClick={this.handleAuthClick}
-          openCreateTeamModal={this.openCreateTeamModal}/>
+          openCreateTeamModal={this.openCreateTeamModal}
+          resetState={this.resetState}/>
         <div className="container">
           {this.state.alert && this.alert()}
           {this.route()}
