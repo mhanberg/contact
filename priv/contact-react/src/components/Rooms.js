@@ -8,13 +8,22 @@ import {
 } from 'react-bootstrap';
 
 
-const renderRooms = (rooms) => {
-  return rooms.map(room => <ListGroupItem key={room.name}>{room.name}</ListGroupItem>)
+const renderRooms = (rooms, currentRoom) => {
+  return rooms.map(room => {
+    return <ListGroupItem 
+      key={room.name}
+      active={room.id === currentRoom.id}
+    >
+      {room.name}
+    </ListGroupItem>
+  });
 }
 
 const Room = (props) => {
   const {
-    rooms
+    rooms,
+    currentRoom,
+    openCreateRoomModal
   } = props;
 
   return(
@@ -23,7 +32,8 @@ const Room = (props) => {
         <Panel>
           <Panel.Heading>Rooms</Panel.Heading>
           <ListGroup>
-            {renderRooms(rooms || [])}
+            {renderRooms(rooms || [], currentRoom, openCreateRoomModal)}
+            <ListGroupItem onClick={openCreateRoomModal} key='createNewRoom'>Create new room</ListGroupItem>
           </ListGroup>
         </Panel>
       </Col>

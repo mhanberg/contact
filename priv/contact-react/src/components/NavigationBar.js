@@ -48,15 +48,15 @@ const renderTeams = (teams, currentTeam, setCurrentTeam) => {
   return _.compact(dropDownItems);
 }
 
-const loggedInOptions = (handleAuthClick, teams, currentTeam, setCurrentTeam, openCreateTeamModal) => {
-  console.log(openCreateTeamModal);
+const loggedInOptions = (handleAuthClick, teams, currentTeam, setCurrentTeam, openCreateTeamModal, resetState) => {
   return (
     <Nav pullRight>
-      <NavDropdown id="teamDropDown" eventKey={2} title={currentTeam.name}>
+      <NavDropdown id="teamDropDown" eventKey={2} title={(currentTeam && currentTeam.name) || 'Create new team'}>
         {renderTeams(teams, currentTeam, setCurrentTeam)}
+        <MenuItem divider />
         <MenuItem onClick={openCreateTeamModal} key='openTeamModal'>Create new team</MenuItem>
       </NavDropdown>
-      <NavItem eventKey={1} onClick={logOut(handleAuthClick('login'))}>Log out</NavItem>
+      <NavItem eventKey={1} onClick={logOut(handleAuthClick('login'), resetState)}>Log out</NavItem>
     </Nav>
   );
 }
