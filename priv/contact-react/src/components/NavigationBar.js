@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import {
   Navbar,
   Nav,
@@ -18,9 +19,9 @@ const logOut = callback => {
     callback();
   }
 }
-const NavOptions = (handleClick, teams, currentTeam) => {
+const NavOptions = (handleClick, teams, currentTeam, setCurrentTeam, openCreateTeamModal) => {
   return isLoggedIn()
-    ? loggedInOptions(handleClick, teams, currentTeam)
+    ? loggedInOptions(handleClick, teams, currentTeam, setCurrentTeam, openCreateTeamModal)
     : loggedOutOptions(handleClick); 
 }
 const loggedOutOptions = (handleAuthClick) => {
@@ -36,16 +37,23 @@ const loggedOutOptions = (handleAuthClick) => {
   );
 }
 
-const renderTeams = (teams) => {
-  return teams &&
-    teams.map(team => <MenuItem key={team.name}>{team.name}</MenuItem>);
+const renderTeams = (teams, currentTeam, setCurrentTeam) => {
+  const dropDownItems = teams.map(team => {
+    return  team.id !== currentTeam.id
+      ? <MenuItem onClick={setCurrentTeam(team)} key={team.name}>{team.name}</MenuItem>
+      : null;
+  }); 
+
+  return _.compact(dropDownItems);
 }
 
-const loggedInOptions = (handleAuthClick, teams, currentTeam) => {
+const loggedInOptions = (handleAuthClick, teams, currentTeam, setCurrentTeam, openCreateTeamModal) => {
+  console.log(openCreateTeamModal);
   return (
     <Nav pullRight>
       <NavDropdown id="teamDropDown" eventKey={2} title={currentTeam.name}>
-        {renderTeams(teams)}
+        {renderTeams(teams, currentTeam, setCurrentTeam)}
+        <MenuItem onClick={openCreateTeamModal} key='openTeamModal'>Create new team</MenuItem>
       </NavDropdown>
       <NavItem eventKey={1} onClick={logOut(handleAuthClick('login'))}>Log out</NavItem>
     </Nav>
@@ -55,7 +63,9 @@ const NavigationBar = (props) => {
   const {
     handleAuthClick, 
     teams,
-    currentTeam
+    currentTeam,
+    setCurrentTeam,
+    openCreateTeamModal
   } = props;
 
   return(
@@ -67,7 +77,7 @@ const NavigationBar = (props) => {
         <Navbar.Toggle />
       </Navbar.Header>
       <Navbar.Collapse>
-        {NavOptions(handleAuthClick, teams, currentTeam)}
+        {NavOptions(handleAuthClick, teams, currentTeam, setCurrentTeam, openCreateTeamModal)}
       </Navbar.Collapse>
     </Navbar>
   );

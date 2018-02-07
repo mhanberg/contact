@@ -6,6 +6,7 @@ import SignUp from './components/SignUp';
 import Login from './components/Login';
 import NavigationBar from './components/NavigationBar';
 import Home from './components/Home';
+import CreateTeamModal from './components/CreateTeamModal';
 import './App.css';
 
 class App extends React.Component {
@@ -15,7 +16,10 @@ class App extends React.Component {
     this.state = {
       route: 'login',
       loggedIn: isLoggedIn(),
-      alert: false
+      currentTeam: {name: ''},
+      teams: [],
+      alert: false,
+      showCreateTeamModal: false
     }
   }
 
@@ -51,7 +55,6 @@ class App extends React.Component {
         });
       })
       .catch(err => console.log(err));
-
   }
 
   alert = () => {
@@ -73,6 +76,19 @@ class App extends React.Component {
     }
   }
 
+  setCurrentTeam = currentTeam => {
+    return () => { 
+      console.log('setting team');
+      console.log(currentTeam);
+      this.setState({currentTeam});
+    }
+  }
+
+  openCreateTeamModal = () => {
+    console.log("open modal");
+    this.setState({showCreateTeamModal: true});
+  } 
+
   route = () => {
     const noAuthRoute = this.state.route === 'login'
       ? <Login handleAuthClick={this.handleAuthClick('home')}/>
@@ -86,7 +102,13 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <NavigationBar currentTeam={this.state.currentTeam || {name: ''}} teams={this.state.teams} handleAuthClick={this.handleAuthClick}></NavigationBar>
+        <CreateTeamModal currentUser={this.state.user} setAlert={this.setAlert} close={() => this.setState({showCreateTeamModal: false})} show={this.state.showCreateTeamModal}/>
+        <NavigationBar
+          currentTeam={this.state.currentTeam}
+          setCurrentTeam={this.setCurrentTeam}
+          teams={this.state.teams}
+          handleAuthClick={this.handleAuthClick}
+          openCreateTeamModal={this.openCreateTeamModal}/>
         <div className="container">
           {this.state.alert && this.alert()}
           {this.route()}
