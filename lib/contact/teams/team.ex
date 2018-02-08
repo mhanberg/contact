@@ -28,6 +28,7 @@ defmodule Contact.Teams.Team do
     |> cast(attrs, [:name])
     |> put_assoc(:owner, owner)
     |> validate_required([:name, :owner])
+    |> validate_length(:name, max: 25, count: :codepoints)
   end
 
   defp get_owner(nil), do: nil
