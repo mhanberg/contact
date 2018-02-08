@@ -20,6 +20,7 @@ class App extends React.Component {
       teams: [],
       alert: false,
       showCreateTeamModal: false,
+      reload: false,
       user: null
     };
 
@@ -33,8 +34,9 @@ class App extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (!prevState.loggedIn && prevState.loggedIn !== this.state.loggedIn) {
+    if (this.state.reload || (!prevState.loggedIn && prevState.loggedIn !== this.state.loggedIn)) {
       this.getUserAndTeams();
+      this.setState({reload: false});
     }
   }
 
@@ -77,7 +79,7 @@ class App extends React.Component {
     setTimeout(() => this.setState({alert: false}), 10000);
   }
 
-  handleAuthClick = (route) => {
+  handleAuthClick = route => {
     return () => {
       this.setState({route, loggedIn: isLoggedIn()});
     }
@@ -85,14 +87,11 @@ class App extends React.Component {
 
   setCurrentTeam = currentTeam => {
     return () => { 
-      console.log('setting team');
-      console.log(currentTeam);
       this.setState({currentTeam});
     }
   }
 
   openCreateTeamModal = () => {
-    console.log("open modal");
     this.setState({showCreateTeamModal: true});
   } 
 
@@ -102,14 +101,14 @@ class App extends React.Component {
       : <SignUp setAlert={this.setAlert} handleAuthClick={this.handleAuthClick('login')}/>;
     const {user, currentTeam} = this.state;
     return isLoggedIn()
-      ? <Home user={user && user.id} team={currentTeam && currentTeam.id} setAlert={this.setAlert} /> 
+      ? <Home userId={user && user.id} teamId={currentTeam && currentTeam.id} setAlert={this.setAlert} /> 
       : noAuthRoute;
   }
 
   render() {
     return (
       <div>
-        <CreateTeamModal currentUser={this.state.user} setAlert={this.setAlert} close={() => this.setState({showCreateTeamModal: false})} show={this.state.showCreateTeamModal}/>
+        <CreateTeamModal currentUser={this.state.user} setAlert={this.setAlert} close={(shouldReload) => this.setState({showCreateTeamModal: false, reload: shouldReload})} show={this.state.showCreateTeamModal}/>
         <NavigationBar
           currentTeam={this.state.currentTeam}
           setCurrentTeam={this.setCurrentTeam}

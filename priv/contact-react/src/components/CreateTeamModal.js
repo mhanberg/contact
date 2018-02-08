@@ -30,7 +30,7 @@ class CreateTeamModal extends React.Component {
     this.props.close();
   }  
 
-  handleChange = (key) => {
+  handleChange = key => {
     return event => this.setState({[key]: event.target.value});
   }
 
@@ -52,8 +52,8 @@ class CreateTeamModal extends React.Component {
       })
       .then(resp => {
         this.props.setAlert({stye: 'success', message: 'Team Successfully Created'});
-        this.setState({show: false, isLoading: false});
-        this.props.close();
+        this.setState({show: false, isLoading: false, name: ''});
+        this.props.close(true);
       })
       .catch(err => {
         this.setState({isLoading: false, validationState: 'error'});
@@ -67,7 +67,7 @@ class CreateTeamModal extends React.Component {
         <Modal.Body>
           <FormGroup validationState={this.state.validationState}>
             <ControlLabel>Team Name</ControlLabel>
-            <FormControl value={this.state.name} placeholder="Team Name" onChange={this.handleChange('name')} />
+            <FormControl maxLength={25} value={this.state.name} placeholder="Team Name" onChange={this.handleChange('name')} />
             <HelpBlock />
             <Button
               onClick={this.state.isLoading ? null : this.createTeam}

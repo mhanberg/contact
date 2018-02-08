@@ -8,22 +8,24 @@ import {
 } from 'react-bootstrap';
 
 
-const renderRooms = (rooms, currentRoom) => {
+const renderRooms = (rooms, currentRoom, setCurrentRoom) => {
   return rooms.map(room => {
-    return <ListGroupItem 
+    return (<ListGroupItem 
       key={room.name}
       active={room.id === currentRoom.id}
+      onClick={setCurrentRoom(room)}
     >
       {room.name}
-    </ListGroupItem>
+    </ListGroupItem>);
   });
 }
 
-const Room = (props) => {
+const Rooms = props => {
   const {
     rooms,
     currentRoom,
-    openCreateRoomModal
+    openCreateRoomModal,
+    setCurrentRoom
   } = props;
 
   return(
@@ -32,7 +34,7 @@ const Room = (props) => {
         <Panel>
           <Panel.Heading>Rooms</Panel.Heading>
           <ListGroup>
-            {renderRooms(rooms || [], currentRoom, openCreateRoomModal)}
+            {renderRooms(rooms || [], currentRoom, setCurrentRoom)}
             <ListGroupItem onClick={openCreateRoomModal} key='createNewRoom'>Create new room</ListGroupItem>
           </ListGroup>
         </Panel>
@@ -41,4 +43,4 @@ const Room = (props) => {
   );
 }
 
-export default Room;
+export default Rooms;

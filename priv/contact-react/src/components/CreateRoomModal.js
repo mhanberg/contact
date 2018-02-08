@@ -30,7 +30,7 @@ class CreateRoomModal extends React.Component {
     this.props.close();
   }  
 
-  handleChange = (key) => {
+  handleChange = key => {
     return event => this.setState({[key]: event.target.value});
   }
 
@@ -47,14 +47,14 @@ class CreateRoomModal extends React.Component {
           type: "rooms",
           attributes: {
             name: this.state.name,
-            owner_id: this.props.currentUser,
-            team_id: this.props.team
+            owner_id: this.props.currentUserId,
+            team_id: this.props.teamId
           }
         }
       })
       .then(resp => {
         this.props.setAlert({style: 'success', message: 'Room Successfully Created'});
-        this.setState({show: false, isLoading: false});
+        this.setState({show: false, isLoading: false, name: ''});
         this.props.close();
       })
       .catch(err => {
