@@ -2,7 +2,7 @@ defmodule ContactWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", ContactWeb.RoomChannel
+  channel "room:*", ContactWeb.RoomChannel
 
   ## Transports
   transport(:websocket, Phoenix.Transports.WebSocket, timeout: 45_000)
@@ -19,10 +19,13 @@ defmodule ContactWeb.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(_params, socket) do
-    {:ok, socket}
-  end
-
+  def connect(%{"token" => token}, socket) do
+    case Guardian.Phoenix.Socket.authenticate(socket, ContactWeb.Guardian, token) do
+      {:ok, authed_socket} ->
+        {:ok, authed_socket}
+      {:error, _} -> :error
+    end
+  end 
   # Socket id's are topics that allow you to identify all sockets for a given user:
   #
   #     def id(socket), do: "user_socket:#{socket.assigns.user_id}"
