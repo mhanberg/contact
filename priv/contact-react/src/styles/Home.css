@@ -1,0 +1,5 @@
+.message-box {
+  height: 50vh;
+  border: solid red 1px;
+  margin: 5px;
+}
