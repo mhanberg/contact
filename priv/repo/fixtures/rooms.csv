@@ -1,0 +1,9 @@
+name,owner_id,team_id,members
+javascript,1,1,2
+elixir,2,1,3
+ruby,3,1,2;3
+rails,2,2,4
+ios,4,2,2;5
+blogging,6,3,3;7
+programming,6,3,3
+managers,6,3,3;7

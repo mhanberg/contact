@@ -1,0 +1,8 @@
+email,username,first_name,last_name,password,password_confirmation
+Alice@email.com,alice,Alice,lastname,password,password
+Bob@email.com,bob,Bob,lastname,password,password
+Carol@email.com,carol,Carol,lastname,password,password
+Dave@email.com,dave,Dave,lastname,password,password
+Edwin@email.com,edwin,Edwin,lastname,password,password
+Frank@email.com,frank,Frank,lastname,password,password
+Gary@email.com,gary,Gary,lastname,password,password
