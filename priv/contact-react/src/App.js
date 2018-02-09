@@ -1,7 +1,7 @@
 import React from 'react';
 import {Alert} from 'react-bootstrap';
 import request from 'superagent';
-import {isLoggedIn, getSession} from './util/session';
+import {isLoggedIn, getSession, destroySession} from './util/session';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
 import NavigationBar from './components/NavigationBar';
@@ -63,7 +63,11 @@ class App extends React.Component {
           currentTeam
         });
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        destroySession();
+        this.resetState();
+        this.setAlert({style: 'danger', message: 'Sorry, please log back in.'});
+      });
   }
 
   alert = () => {

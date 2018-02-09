@@ -32,9 +32,9 @@ defmodule ContactWeb.Api.V1.UserController do
 
   def show(conn, %{"id" => "self"}) do
     ["Bearer " <> token] = conn |> get_req_header("authorization")
-    {:ok, user, _c} = ContactWeb.Guardian.resource_from_token(token)
-
-    render(conn, "show.json-api", user: user)
+    with {:ok, user, _c} <- ContactWeb.Guardian.resource_from_token(token) do
+      render(conn, "show.json-api", user: user)
+    end
   end
 
   def show(conn, %{"id" => id}) do
