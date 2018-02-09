@@ -7,6 +7,7 @@ import Login from './components/Login';
 import NavigationBar from './components/NavigationBar';
 import Home from './components/Home';
 import CreateTeamModal from './components/CreateTeamModal';
+import _ from 'lodash';
 import './App.css';
 
 class App extends React.Component {
@@ -21,7 +22,7 @@ class App extends React.Component {
       alert: false,
       showCreateTeamModal: false,
       reload: false,
-      user: null
+      user: {'first-name': '', 'last-name': ''}
     };
 
     this.state = {...this.initialState};
@@ -51,7 +52,11 @@ class App extends React.Component {
       .type('application/vnd.api+json')
       .set('authorization', `Bearer ${getSession()}`)
       .then(resp => {
-        const teams = resp.body.included.map(team => {
+        const teams = _.filter(resp.body.included, (x) => {
+          const teamIds = resp.body.data.relationships.teams.data.map(t => t.id);
+          return x.type === "team" && _.includes(teamIds, x.id);
+        })
+        .map(team => {
           return {...team.attributes, id: team.id};
         });
         const user = {...resp.body.data.attributes, id: resp.body.data.id};
@@ -119,7 +124,8 @@ class App extends React.Component {
           teams={this.state.teams}
           handleAuthClick={this.handleAuthClick}
           openCreateTeamModal={this.openCreateTeamModal}
-          resetState={this.resetState}/>
+          resetState={this.resetState}
+          currentUser={`${this.state.user['first-name']} ${this.state.user['last-name']}`}/>
         <div className="container">
           {this.state.alert && this.alert()}
           {this.route()}

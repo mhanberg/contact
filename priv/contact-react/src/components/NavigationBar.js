@@ -48,12 +48,14 @@ const renderTeams = (teams, currentTeam, setCurrentTeam) => {
   return _.compact(dropDownItems);
 }
 
+const renderDivider = (show) => show ? <MenuItem key='divider' divider /> : null;
+
 const loggedInOptions = (handleAuthClick, teams, currentTeam, setCurrentTeam, openCreateTeamModal, resetState) => {
   return (
     <Nav pullRight>
       <NavDropdown id="teamDropDown" eventKey={2} title={(currentTeam && currentTeam.name) || 'Create new team'}>
         {renderTeams(teams, currentTeam, setCurrentTeam)}
-        <MenuItem divider />
+        {renderDivider(teams.length > 1)}
         <MenuItem onClick={openCreateTeamModal} key='openTeamModal'>Create new team</MenuItem>
       </NavDropdown>
       <NavItem eventKey={1} onClick={logOut(handleAuthClick('login'), resetState)}>Log out</NavItem>
@@ -67,18 +69,18 @@ const NavigationBar = (props) => {
     currentTeam,
     setCurrentTeam,
     resetState,
+    currentUser,
     openCreateTeamModal
   } = props;
 
   return(
     <Navbar inverse collapseOnSelect>
       <Navbar.Header>
-        <Navbar.Brand>
-          <a href="#brand">Contact</a>
-        </Navbar.Brand>
+        <Navbar.Text>Contact</Navbar.Text>
         <Navbar.Toggle />
       </Navbar.Header>
       <Navbar.Collapse>
+        <Navbar.Text>{currentUser}</Navbar.Text>
         {NavOptions(handleAuthClick, teams, currentTeam, setCurrentTeam, openCreateTeamModal, resetState)}
       </Navbar.Collapse>
     </Navbar>
