@@ -10,7 +10,7 @@ defmodule ContactWeb.Api.V1.UserSerializer do
     serializer: ContactWeb.Api.V1.TeamSerializer
   )
 
-  def teams(struct, conn) do
+  def teams(struct, _conn) do
     case struct.teams do
       %Ecto.Association.NotLoaded{} ->
         struct

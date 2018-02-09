@@ -6,7 +6,7 @@ defmodule ContactWeb.Guardian do
   end
 
   def resource_from_claims(claims) do
-    case resource =  Contact.Accounts.get_user(claims["sub"]) do
+    case Contact.Accounts.get_user(claims["sub"]) do
       {:error, :not_found} -> {:error, :unauthorized}
       resource -> {:ok, resource}
     end

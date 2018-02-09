@@ -16,7 +16,7 @@ defmodule ContactWeb.Api.V1.TeamSerializer do
     serializer: UserSerializer
   )
 
-  def owner(struct, conn) do
+  def owner(struct, _conn) do
     case struct.owner do
       %Ecto.Association.NotLoaded{} ->
         struct
@@ -28,7 +28,7 @@ defmodule ContactWeb.Api.V1.TeamSerializer do
     end
   end
 
-  def members(struct, conn) do
+  def members(struct, _conn) do
     case struct.members do
       %Ecto.Association.NotLoaded{} ->
         struct
