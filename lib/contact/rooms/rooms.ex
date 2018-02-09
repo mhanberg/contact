@@ -57,7 +57,7 @@ defmodule Contact.Rooms do
 
     room
     |> Ecto.Changeset.change()
-    |> Ecto.Changeset.put_assoc(:members, [user])
+    |> Ecto.Changeset.put_assoc(:members, [user | room.members])
     |> Repo.update()
   end
 

@@ -48,7 +48,7 @@ defmodule Contact.Teams do
 
     team
     |> Ecto.Changeset.change()
-    |> Ecto.Changeset.put_assoc(:members, [user])
+    |> Ecto.Changeset.put_assoc(:members, [user | team.members])
     |> Repo.update()
   end
 
