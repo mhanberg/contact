@@ -2,7 +2,7 @@ port module Chat exposing (main)
 
 import Html exposing (..)
 import Model exposing (..)
-import Update exposing (update)
+import Update exposing (update, session)
 import View exposing (view)
 
 
@@ -27,4 +27,4 @@ init flags =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    session Session

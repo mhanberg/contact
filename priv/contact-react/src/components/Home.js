@@ -48,6 +48,15 @@ class Home extends React.Component {
     }
   }
 
+  setupElmPorts = (ports) => {
+    ports.getSession.subscribe(() => {
+      const session = getSession();
+      console.log("GETTING SESSION");
+
+      ports.session.send(session);
+    });
+  }
+
   render() {
     return(
       <div>
@@ -61,7 +70,7 @@ class Home extends React.Component {
               openCreateRoomModal={this.openCreateRoomModal} />
           </Col>
           <Col xs={6} lg={6}>
-            <Elm src={Chat} flags={this.state.currentRoom.id} key={this.state.currentRoom.id}/>
+            <Elm src={Chat} flags={this.state.currentRoom.id} ports={this.setupElmPorts} key={this.state.currentRoom.id}/>
           </Col>
         </Row>
       </div>
