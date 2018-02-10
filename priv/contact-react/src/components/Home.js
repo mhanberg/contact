@@ -3,6 +3,8 @@ import Rooms from './Rooms';
 import request from 'superagent';
 import {getSession} from '../util/session';
 import CreateRoomModal from './CreateRoomModal';
+import Elm from 'react-elm-components';
+import {Chat} from '../elm/Chat.elm';
 
 class Home extends React.Component {
   constructor(props) {
@@ -51,6 +53,7 @@ class Home extends React.Component {
           rooms={this.state.rooms} 
           currentRoom={this.state.currentRoom} 
           openCreateRoomModal={this.openCreateRoomModal} />
+        <Elm src={Chat}/>
       </div>
     );
   }
