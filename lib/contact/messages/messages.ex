@@ -10,6 +10,12 @@ defmodule Contact.Messages do
 
   def get_message!(id), do: Repo.get!(Message, id) |> Repo.preload(:sender) |> Repo.preload(room: [:owner, :members])
 
+  def get_messages_for_room(room_id) do
+    Contact.Rooms.get_room!(room_id)
+    |> Repo.preload(:messages)
+    |> Map.get(:messages, [])
+  end
+
   def create_message(attrs \\ %{}) do
     %Message{}
     |> Message.changeset(attrs)

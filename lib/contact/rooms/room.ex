@@ -18,6 +18,13 @@ defmodule Contact.Rooms.Room do
       on_replace: :delete
     )
 
+    has_many(
+      :messages,
+      Contact.Messages.Message,
+      on_delete: :delete_all,
+      on_replace: :nilify
+    )
+
     timestamps()
   end
 
