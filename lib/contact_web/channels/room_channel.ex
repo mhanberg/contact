@@ -1,7 +1,7 @@
 defmodule ContactWeb.RoomChannel do
   use Phoenix.Channel
 
-  def join("room:" <> room_id, _auth_message, socket) do
+  def join("room:" <> _room_id, _auth_message, socket) do
     {:ok, socket}
   end
 
