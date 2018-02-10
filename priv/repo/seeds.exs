@@ -51,3 +51,13 @@ File.stream!("./priv/repo/fixtures/rooms.csv")
   |> Enum.map(fn(member_id) -> Contact.Rooms.add_member(index + 1, member_id) end)
 end)
 
+File.stream!("./priv/repo/fixtures/messages.csv")
+|> CSV.decode!(headers: true)
+|> Enum.map(fn(message) ->
+  Contact.Messages.create_message(%{
+    "body" => message["body"],
+    "sender_id" => message["sender_id"],
+    "room_id" => message["room_id"]
+  })
+end)
+
