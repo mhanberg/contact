@@ -2,11 +2,17 @@ module Model exposing (..)
 
 
 type Msg
-    = Null
+    = GetRoomMessages (Maybe String)
+
+
+type alias Flags =
+    Maybe String
 
 
 type alias Model =
-    { messages : List Message }
+    { roomId : Maybe String
+    , messages : List Message
+    }
 
 
 type alias Message =
@@ -17,7 +23,8 @@ type alias Message =
 
 start : Model
 start =
-    { messages =
+    { roomId = Nothing
+    , messages =
         [ { sender = "The Librarian"
           , body = "Ook!"
           }
