@@ -60,7 +60,7 @@ class Home extends React.Component {
               currentRoom={this.state.currentRoom} 
               openCreateRoomModal={this.openCreateRoomModal} />
           </Col>
-          <Col lg={6} xs={6}>
+          <Col xs={6} lg={6}>
             <Elm src={Chat}/>
           </Col>
         </Row>

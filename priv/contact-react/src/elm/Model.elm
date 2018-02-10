@@ -2,14 +2,27 @@ module Model exposing (..)
 
 
 type Msg
-    = Increment
-    | Decrement
+    = Null
 
 
 type alias Model =
-    { count : Int }
+    { messages : List Message }
+
+
+type alias Message =
+    { sender : String
+    , body : String
+    }
 
 
 start : Model
 start =
-    { count = 0 }
+    { messages =
+        [ { sender = "The Librarian"
+          , body = "Ook!"
+          }
+        , { sender = "Rincewind"
+          , body = "Run!"
+          }
+        ]
+    }
