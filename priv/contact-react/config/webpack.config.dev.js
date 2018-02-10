@@ -192,7 +192,10 @@ module.exports = {
             rules: [{
               test: /\.elm$/,
               exclude: [/elm-stuff/, /node_modules/],
-              loader: require.resolve('elm-webpack-loader')
+              loader: require.resolve('elm-webpack-loader'),
+              options: {
+                forceWatch: true
+              }
             }]
           },
           // "file" loader makes sure those assets get served by WebpackDevServer.
