@@ -5,6 +5,10 @@ import {getSession} from '../util/session';
 import CreateRoomModal from './CreateRoomModal';
 import Elm from 'react-elm-components';
 import {Chat} from '../elm/Chat.elm';
+import {
+  Row,
+  Col
+} from 'react-bootstrap';
 
 class Home extends React.Component {
   constructor(props) {
@@ -48,12 +52,18 @@ class Home extends React.Component {
     return(
       <div>
         <CreateRoomModal teamId={this.props.teamId} currentUserId={this.props.userId} setAlert={this.props.setAlert} close={() => this.setState({showCreateRoomModal: false})} show={this.state.showCreateRoomModal}/>
-        <Rooms 
-          setCurrentRoom={this.setCurrentRoom} 
-          rooms={this.state.rooms} 
-          currentRoom={this.state.currentRoom} 
-          openCreateRoomModal={this.openCreateRoomModal} />
-        <Elm src={Chat}/>
+        <Row>
+          <Col xs={6} lg={3}>
+            <Rooms 
+              setCurrentRoom={this.setCurrentRoom} 
+              rooms={this.state.rooms} 
+              currentRoom={this.state.currentRoom} 
+              openCreateRoomModal={this.openCreateRoomModal} />
+          </Col>
+          <Col lg={6} xs={6}>
+            <Elm src={Chat}/>
+          </Col>
+        </Row>
       </div>
     );
   }
