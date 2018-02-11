@@ -59,7 +59,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const wsUrl = process.env.NODE_ENV === 'development' ? "localhost:4000" : document.location.host;
+    const wsUrl = process.env.NODE_ENV === 'development' ? "ws://localhost:4000" : "wss://" + document.location.host;
     return(
       <div>
         <CreateRoomModal teamId={this.props.teamId} currentUserId={this.props.userId} setAlert={this.props.setAlert} close={() => this.setState({showCreateRoomModal: false})} show={this.state.showCreateRoomModal}/>

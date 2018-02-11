@@ -49,8 +49,7 @@ start flags =
     , userId = flags.userId
     , phxSocket =
         Phoenix.Socket.init
-            ("ws://"
-                ++ flags.url
+            (flags.url
                 ++ "/socket/websocket?token="
                 ++ flags.token
             )
