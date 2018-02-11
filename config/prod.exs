@@ -18,7 +18,8 @@ config :contact, ContactWeb.Endpoint,
   url: [scheme: 'https', host: "https://quiet-atoll-83762.herokuapp.com", port: 443],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json",
-  secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE")
+  secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE"),
+  check_origin: ["https://quiet-atoll-83762.herokuapp.com"]
 
 # Configure your database
 config :contact, Contact.Repo,
