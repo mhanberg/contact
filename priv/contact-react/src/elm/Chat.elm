@@ -28,4 +28,7 @@ init flags =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.batch [ session Session, Phoenix.Socket.listen model.phxSocket PhoenixMsg ]
+    Sub.batch
+        [ session Session
+        , Phoenix.Socket.listen model.phxSocket PhoenixMsg
+        ]

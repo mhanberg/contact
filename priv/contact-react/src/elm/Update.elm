@@ -2,6 +2,7 @@ port module Update exposing (..)
 
 import Model exposing (..)
 import Http exposing (..)
+import Dom
 import Dom.Scroll exposing (..)
 import Task exposing (..)
 import Json.Decode as Decode
@@ -27,15 +28,11 @@ update msg model =
             )
 
         InitialMessages (Ok s) ->
-            let
-                scroll =
-                    Dom.Scroll.toBottom "chatBox"
-            in
-                ( { model
-                    | messages = s
-                  }
-                , Task.attempt (\_ -> JoinChannel) scroll
-                )
+            ( { model
+                | messages = s
+              }
+            , Task.attempt (\_ -> JoinChannel) scrollBottom
+            )
 
         PhoenixMsg msg ->
             let
@@ -75,7 +72,7 @@ update msg model =
             case Decode.decodeValue socketMessageDecoder raw of
                 Ok chatMessage ->
                     ( { model | messages = chatMessage :: model.messages }
-                    , Cmd.none
+                    , Task.attempt (\_ -> NoOp) scrollBottom
                     )
 
                 Err error ->
@@ -130,6 +127,11 @@ get roomId token =
                         }
             in
                 Http.send InitialMessages r
+
+
+scrollBottom : Task Dom.Error ()
+scrollBottom =
+    Dom.Scroll.toBottom "chatBox"
 
 
 port getSession : () -> Cmd msg
