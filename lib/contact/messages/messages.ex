@@ -12,7 +12,7 @@ defmodule Contact.Messages do
 
   def get_messages_for_room(room_id) do
     Contact.Rooms.get_room!(room_id)
-    |> Repo.preload(:messages)
+    |> Repo.preload(messages: :sender)
     |> Map.get(:messages, [])
   end
 

@@ -1,6 +1,7 @@
 .chat-box {
   height: 60vh;
-  overflow: auto;
+  overflow-y: scroll;
+  word-wrap: break-word;
 }
 
 .bottom-border {
@@ -11,3 +12,4 @@
   padding-top: 5px;
   padding-bottom: 5px;
 }
+

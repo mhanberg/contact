@@ -22,6 +22,8 @@ type alias Flags =
     , token : String
     , url : String
     , userId : String
+    , roomName : String
+    , userName : String
     }
 
 
@@ -32,11 +34,21 @@ type alias Model =
     , newMessage : String
     , token : String
     , userId : String
+    , roomName : String
+    , userName : String
     }
 
 
 type alias Message =
     { body : String
+    , sender_id : String
+    , sender_name : String
+    }
+
+
+type alias Sender =
+    { name : String
+    , id : String
     }
 
 
@@ -47,6 +59,8 @@ start flags =
     , messages = []
     , newMessage = ""
     , userId = flags.userId
+    , roomName = flags.roomName
+    , userName = flags.userName
     , phxSocket =
         Phoenix.Socket.init
             (flags.url

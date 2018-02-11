@@ -28,11 +28,15 @@ update msg model =
             )
 
         InitialMessages (Ok s) ->
-            ( { model
-                | messages = s
-              }
-            , Task.attempt (\_ -> JoinChannel) scrollBottom
-            )
+            let
+                d =
+                    Debug.log "messages" s
+            in
+                ( { model
+                    | messages = s
+                  }
+                , Task.attempt (\_ -> JoinChannel) scrollBottom
+                )
 
         PhoenixMsg msg ->
             let
@@ -48,6 +52,7 @@ update msg model =
                         [ ( "sender_id", Encode.string model.userId )
                         , ( "body", Encode.string model.newMessage )
                         , ( "room_id", Encode.string model.roomId )
+                        , ( "sender_name", Encode.string model.userName )
                         ]
                     )
 
@@ -100,14 +105,14 @@ decodeResponse =
     let
         messageDecoder : Decode.Decoder Message
         messageDecoder =
-            Decode.map Message (Decode.at [ "attributes", "body" ] Decode.string)
+            Decode.map3 Message (Decode.field "body" Decode.string) (Decode.field "sender_name" Decode.string) (Decode.field "sender_id" Decode.string)
     in
         Decode.at [ "data" ] (Decode.list messageDecoder)
 
 
 socketMessageDecoder : Decode.Decoder Message
 socketMessageDecoder =
-    Decode.map Message (Decode.field "body" Decode.string)
+    Decode.map3 Message (Decode.field "body" Decode.string) (Decode.field "sender_name" Decode.string) (Decode.field "sender_id" Decode.string)
 
 
 get : String -> String -> Cmd Msg

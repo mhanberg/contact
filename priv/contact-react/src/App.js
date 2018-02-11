@@ -109,7 +109,7 @@ class App extends React.Component {
       : <SignUp setAlert={this.setAlert} handleAuthClick={this.handleAuthClick('login')}/>;
     const {user, currentTeam} = this.state;
     return isLoggedIn()
-      ? <Home userId={user && user.id} teamId={currentTeam && currentTeam.id} setAlert={this.setAlert} /> 
+      ? <Home userName={user && user.username} userId={user && user.id} teamId={currentTeam && currentTeam.id} setAlert={this.setAlert} /> 
       : noAuthRoute;
   }
 

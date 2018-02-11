@@ -73,7 +73,19 @@ class Home extends React.Component {
           </Col>
           <Col xs={9} >
             {this.state.currentRoom.id &&
-                <Elm src={Chat} flags={{roomId: this.state.currentRoom.id, token: getSession(), url: wsUrl, userId: this.props.userId}} ports={this.setupElmPorts} key={this.state.currentRoom.id}/>
+                <Elm 
+                  src={Chat} 
+                  flags={{
+                    roomId: this.state.currentRoom.id, 
+                    roomName: this.state.currentRoom.name,
+                    token: getSession(), 
+                    url: wsUrl, 
+                    userName: this.props.userName,
+                    userId: this.props.userId
+                  }} 
+                  ports={this.setupElmPorts} 
+                  key={this.state.currentRoom.id}
+                />
             }
           </Col>
         </Row>
