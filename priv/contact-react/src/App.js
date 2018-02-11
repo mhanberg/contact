@@ -8,7 +8,6 @@ import NavigationBar from './components/NavigationBar';
 import Home from './components/Home';
 import CreateTeamModal from './components/CreateTeamModal';
 import _ from 'lodash';
-import './App.css';
 
 class App extends React.Component {
   constructor(props) {
