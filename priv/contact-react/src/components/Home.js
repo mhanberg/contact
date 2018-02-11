@@ -59,6 +59,7 @@ class Home extends React.Component {
   }
 
   render() {
+    const wsUrl = process.env.NODE_ENV === 'development' ? "localhost:4000" : document.location.host;
     return(
       <div>
         <CreateRoomModal teamId={this.props.teamId} currentUserId={this.props.userId} setAlert={this.props.setAlert} close={() => this.setState({showCreateRoomModal: false})} show={this.state.showCreateRoomModal}/>
@@ -71,7 +72,9 @@ class Home extends React.Component {
               openCreateRoomModal={this.openCreateRoomModal} />
           </Col>
           <Col xs={9} >
-            <Elm src={Chat} flags={this.state.currentRoom.id} ports={this.setupElmPorts} key={this.state.currentRoom.id}/>
+            {this.state.currentRoom.id &&
+                <Elm src={Chat} flags={{roomId: this.state.currentRoom.id, token: getSession(), url: wsUrl, userId: this.props.userId}} ports={this.setupElmPorts} key={this.state.currentRoom.id}/>
+            }
           </Col>
         </Row>
       </div>

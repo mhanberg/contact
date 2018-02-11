@@ -5,14 +5,18 @@ import Http exposing (..)
 import Dom.Scroll exposing (..)
 import Task exposing (..)
 import Json.Decode as Decode
+import Json.Encode as Encode
+import Phoenix.Socket
+import Phoenix.Push
+import Phoenix.Channel
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        GetRoomMessages (Just roomId) ->
+        GetRoomMessages roomId ->
             ( { model
-                | roomId = Just roomId
+                | roomId = roomId
               }
             , getSession ()
             )
@@ -30,7 +34,64 @@ update msg model =
                 ( { model
                     | messages = s
                   }
-                , Task.attempt (\_ -> NoOp) scroll
+                , Task.attempt (\_ -> JoinChannel) scroll
+                )
+
+        PhoenixMsg msg ->
+            let
+                ( phxSocket, phxCmd ) =
+                    Phoenix.Socket.update msg model.phxSocket
+            in
+                ( { model | phxSocket = phxSocket }, Cmd.map PhoenixMsg phxCmd )
+
+        SendMessage ->
+            let
+                payload =
+                    (Encode.object
+                        [ ( "sender_id", Encode.string model.userId )
+                        , ( "body", Encode.string model.newMessage )
+                        , ( "room_id", Encode.string model.roomId )
+                        ]
+                    )
+
+                push_ =
+                    Phoenix.Push.init "new:msg" ("room:" ++ model.roomId)
+                        |> Phoenix.Push.withPayload payload
+
+                ( phxSocket, phxCmd ) =
+                    Phoenix.Socket.push push_ model.phxSocket
+            in
+                ( { model
+                    | newMessage = ""
+                    , phxSocket = phxSocket
+                  }
+                , Cmd.map PhoenixMsg phxCmd
+                )
+
+        SetNewMessage msg ->
+            ( { model | newMessage = msg }, Cmd.none )
+
+        ReceiveChatMessage raw ->
+            case Decode.decodeValue socketMessageDecoder raw of
+                Ok chatMessage ->
+                    ( { model | messages = chatMessage :: model.messages }
+                    , Cmd.none
+                    )
+
+                Err error ->
+                    ( model, Cmd.none )
+
+        JoinChannel ->
+            let
+                channel =
+                    Phoenix.Channel.init ("room:" ++ model.roomId)
+                        |> Phoenix.Channel.withPayload (Encode.object [ ( "token", Encode.string model.token ) ])
+
+                ( phxSocket, phxCmd ) =
+                    Phoenix.Socket.join channel model.phxSocket
+            in
+                ( { model | phxSocket = phxSocket }
+                , Cmd.map PhoenixMsg phxCmd
                 )
 
         _ ->
@@ -47,13 +108,15 @@ decodeResponse =
         Decode.at [ "data" ] (Decode.list messageDecoder)
 
 
-get : Maybe String -> String -> Cmd Msg
+socketMessageDecoder : Decode.Decoder Message
+socketMessageDecoder =
+    Decode.map Message (Decode.field "body" Decode.string)
+
+
+get : String -> String -> Cmd Msg
 get roomId token =
     case roomId of
-        Nothing ->
-            Cmd.none
-
-        Just roomId ->
+        roomId ->
             let
                 r =
                     request

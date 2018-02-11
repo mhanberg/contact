@@ -2,6 +2,7 @@ module View exposing (view)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (onClick, onInput)
 import Task exposing (Task)
 import Dom exposing (..)
 import Dom.Scroll exposing (..)
@@ -11,7 +12,7 @@ import Model exposing (..)
 view : Model -> Html Msg
 view model =
     div []
-        [ div [] [ text (model.roomId |> Maybe.withDefault "999") ]
+        [ div [] [ text (model.roomId) ]
         , div [ class "row" ]
             [ div [ class "col-xs-12" ]
                 [ div [ class "well chat-box", id "chatBox" ]
@@ -21,8 +22,8 @@ view model =
                 ]
             ]
         , div [ class "row" ]
-            [ div [ class "col-xs-8 col-sm-10" ] [ input [ placeholder "Type your message...", class "form-control" ] [] ]
-            , div [ class "col-xs-4 col-sm-2" ] [ button [ class "btn btn-danger" ] [ text "Send!" ] ]
+            [ div [ class "col-xs-8 col-sm-10" ] [ input [ type_ "text", value model.newMessage, onInput SetNewMessage, placeholder "Type your message...", class "form-control" ] [] ]
+            , div [ class "col-xs-4 col-sm-2" ] [ button [ class "btn btn-danger", onClick SendMessage ] [ text "Send!" ] ]
             ]
         ]
 

@@ -1,23 +1,37 @@
 module Model exposing (..)
 
 import Http exposing (..)
+import Phoenix.Socket
+import Json.Encode
 
 
 type Msg
     = NoOp
-    | GetRoomMessages (Maybe String)
+    | GetRoomMessages String
     | InitialMessages (Result Http.Error (List Message))
     | Session String
-    | GetSession
+    | ReceiveChatMessage Json.Encode.Value
+    | PhoenixMsg (Phoenix.Socket.Msg Msg)
+    | JoinChannel
+    | SendMessage
+    | SetNewMessage String
 
 
 type alias Flags =
-    Maybe String
+    { roomId : String
+    , token : String
+    , url : String
+    , userId : String
+    }
 
 
 type alias Model =
-    { roomId : Maybe String
+    { roomId : String
     , messages : List Message
+    , phxSocket : Phoenix.Socket.Socket Msg
+    , newMessage : String
+    , token : String
+    , userId : String
     }
 
 
@@ -26,13 +40,20 @@ type alias Message =
     }
 
 
-start : Model
-start =
-    { roomId = Nothing
-    , messages =
-        [ { body = "Ook!"
-          }
-        , { body = "Run!"
-          }
-        ]
+start : Flags -> Model
+start flags =
+    { roomId = flags.roomId
+    , token = flags.token
+    , messages = []
+    , newMessage = ""
+    , userId = flags.userId
+    , phxSocket =
+        Phoenix.Socket.init
+            ("ws://"
+                ++ flags.url
+                ++ "/socket/websocket?token="
+                ++ flags.token
+            )
+            |> Phoenix.Socket.withDebug
+            |> Phoenix.Socket.on "new:msg" ("room:" ++ flags.roomId) ReceiveChatMessage
     }

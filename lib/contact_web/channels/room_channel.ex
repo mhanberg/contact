@@ -5,8 +5,9 @@ defmodule ContactWeb.RoomChannel do
     {:ok, socket}
   end
 
-  def handle_in("new_msg" = event, msg, socket) do
+  def handle_in("new:msg" = event, msg, socket) do
     Contact.Messages.create_message(msg)
+    
     broadcast!(socket, event, msg)
     {:noreply, socket}
   end
