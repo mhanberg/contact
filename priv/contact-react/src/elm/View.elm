@@ -17,6 +17,6 @@ view model =
 renderMessage : Message -> Html Msg
 renderMessage message =
     div [ class "message row" ]
-        [ div [ class "sender col-xs-12 col-sm-4 col-md-3" ] [ text message.sender ]
+        [ div [ class "sender col-xs-12 col-sm-4 col-md-3" ] [ text "sender" ]
         , div [ class "body col-xs-12 col-sm-8 col-md-9" ] [ text message.body ]
         ]

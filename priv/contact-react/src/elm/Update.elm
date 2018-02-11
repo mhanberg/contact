@@ -21,9 +21,9 @@ update msg model =
             )
 
         InitialMessages (Ok s) ->
-            ( { model
-                | roomId = Just s
-              }
+            (  {model
+            | messages = s
+            }
             , Cmd.none
             )
 
@@ -31,9 +31,13 @@ update msg model =
             ( model, Cmd.none )
 
 
-decodeResponse : Decode.Decoder String
+decodeResponse : Decode.Decoder (List Message)
 decodeResponse =
-    Decode.at [ "jsonapi", "version" ] Decode.string
+    let
+        messageDecoder : Decode.Decoder Message
+        messageDecoder = Decode.map Message (Decode.at["attributes", "body"] Decode.string) 
+    in
+    Decode.at["data"] (Decode.list messageDecoder)        
 
 
 get : Maybe String -> String -> Cmd Msg

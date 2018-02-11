@@ -3,7 +3,7 @@ import Http exposing (..)
 
 type Msg
     = GetRoomMessages (Maybe String)
-    | InitialMessages (Result Http.Error String)
+    | InitialMessages (Result Http.Error (List Message))
     | Session String
     | GetSession
 
@@ -17,20 +17,20 @@ type alias Model =
     }
 
 type alias Message =
-    { sender : String
-    , body : String
+    { body : String
     }
+
 
 
 start : Model
 start =
     { roomId = Nothing
     , messages =
-        [ { sender = "The Librarian"
-          , body = "Ook!"
+        [ { 
+           body = "Ook!"
           }
-        , { sender = "Rincewind"
-          , body = "Run!"
+        , { 
+           body = "Run!"
           }
         ]
     }
