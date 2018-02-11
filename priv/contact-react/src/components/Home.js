@@ -9,6 +9,7 @@ import {
   Row,
   Col
 } from 'react-bootstrap';
+import '../styles/Chat.css'
 
 class Home extends React.Component {
   constructor(props) {
@@ -62,14 +63,14 @@ class Home extends React.Component {
       <div>
         <CreateRoomModal teamId={this.props.teamId} currentUserId={this.props.userId} setAlert={this.props.setAlert} close={() => this.setState({showCreateRoomModal: false})} show={this.state.showCreateRoomModal}/>
         <Row>
-          <Col xs={6} lg={3}>
+          <Col xs={3} >
             <Rooms 
               setCurrentRoom={this.setCurrentRoom} 
               rooms={this.state.rooms} 
               currentRoom={this.state.currentRoom} 
               openCreateRoomModal={this.openCreateRoomModal} />
           </Col>
-          <Col xs={6} lg={6}>
+          <Col xs={9} >
             <Elm src={Chat} flags={this.state.currentRoom.id} ports={this.setupElmPorts} key={this.state.currentRoom.id}/>
           </Col>
         </Row>

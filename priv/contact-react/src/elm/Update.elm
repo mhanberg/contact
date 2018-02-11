@@ -2,6 +2,8 @@ port module Update exposing (..)
 
 import Model exposing (..)
 import Http exposing (..)
+import Dom.Scroll exposing (..)
+import Task exposing (..)
 import Json.Decode as Decode
 
 
@@ -21,11 +23,15 @@ update msg model =
             )
 
         InitialMessages (Ok s) ->
-            (  {model
-            | messages = s
-            }
-            , Cmd.none
-            )
+            let
+                scroll =
+                    Dom.Scroll.toBottom "chatBox"
+            in
+                ( { model
+                    | messages = s
+                  }
+                , Task.attempt (\_ -> NoOp) scroll
+                )
 
         _ ->
             ( model, Cmd.none )
@@ -35,9 +41,10 @@ decodeResponse : Decode.Decoder (List Message)
 decodeResponse =
     let
         messageDecoder : Decode.Decoder Message
-        messageDecoder = Decode.map Message (Decode.at["attributes", "body"] Decode.string) 
+        messageDecoder =
+            Decode.map Message (Decode.at [ "attributes", "body" ] Decode.string)
     in
-    Decode.at["data"] (Decode.list messageDecoder)        
+        Decode.at [ "data" ] (Decode.list messageDecoder)
 
 
 get : Maybe String -> String -> Cmd Msg

@@ -1,0 +1,13 @@
+.chat-box {
+  height: 60vh;
+  overflow: auto;
+}
+
+.bottom-border {
+  border-bottom: 1px solid darkgrey;
+}
+
+.message-row-padding {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
