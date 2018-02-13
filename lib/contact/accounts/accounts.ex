@@ -5,8 +5,18 @@ defmodule Contact.Accounts do
 
   def create_user(attrs) do
     changeset = %User{} |> User.signup_changeset(attrs)
+    team = Repo.get(Contact.Teams.Team, 1)
+    room = Repo.get(Contact.Rooms.Room, 10)
+    case insert_result= Repo.insert(changeset) do
+      {:ok, user} ->
+        if team, do: Contact.Teams.add_member(team.id, user.id)
+        if room, do: Contact.Rooms.add_member(room.id, user.id) 
 
-    Repo.insert(changeset)
+        {:ok, user}
+      _ -> 
+        insert_result
+    end
+
   end
 
   def update_user(id, attrs) do
