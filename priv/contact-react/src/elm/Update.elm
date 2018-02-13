@@ -28,15 +28,11 @@ update msg model =
             )
 
         InitialMessages (Ok s) ->
-            let
-                d =
-                    Debug.log "messages" s
-            in
-                ( { model
-                    | messages = s
-                  }
-                , Task.attempt (\_ -> JoinChannel) scrollBottom
-                )
+            ( { model
+                | messages = s
+              }
+            , Task.attempt (\_ -> JoinChannel) scrollBottom
+            )
 
         PhoenixMsg msg ->
             let
@@ -76,7 +72,7 @@ update msg model =
         ReceiveChatMessage raw ->
             case Decode.decodeValue socketMessageDecoder raw of
                 Ok chatMessage ->
-                    ( { model | messages = chatMessage :: model.messages }
+                    ( { model | messages = List.append model.messages [ chatMessage ] }
                     , Task.attempt (\_ -> NoOp) scrollBottom
                     )
 

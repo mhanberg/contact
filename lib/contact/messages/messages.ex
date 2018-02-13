@@ -14,6 +14,7 @@ defmodule Contact.Messages do
     Contact.Rooms.get_room!(room_id)
     |> Repo.preload(messages: :sender)
     |> Map.get(:messages, [])
+    |> Enum.sort(&(NaiveDateTime.compare(&1.inserted_at, &2.inserted_at) == :lt))
   end
 
   def create_message(attrs \\ %{}) do

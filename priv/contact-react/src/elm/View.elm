@@ -15,8 +15,7 @@ view model =
                     [ div [ class "panel-heading" ] [ text model.roomName ]
                     , div [ class "panel-body" ]
                         [ div [ class "well chat-box", id "chatBox" ]
-                            [ List.reverse model.messages
-                                |> Debug.log "messages"
+                            [ model.messages
                                 |> List.map renderMessage
                                 |> div [ class "message-log" ]
                             ]
