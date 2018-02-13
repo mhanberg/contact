@@ -16,4 +16,4 @@ deploy:
   on:
     repo: mhanberg/contact
   run:
-    - "mix ecto.reset"
+    - "mix ecto.migrate"
