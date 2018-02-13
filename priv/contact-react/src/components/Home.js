@@ -64,29 +64,29 @@ class Home extends React.Component {
       <div>
         <CreateRoomModal teamId={this.props.teamId} currentUserId={this.props.userId} setAlert={this.props.setAlert} close={() => this.setState({showCreateRoomModal: false})} show={this.state.showCreateRoomModal}/>
         <Row>
-          <Col xs={3} >
+          <Col xs={12} sm={9} smPush={3}>
+            {this.state.currentRoom.id &&
+              <Elm 
+                src={Chat} 
+                flags={{
+                  roomId: this.state.currentRoom.id, 
+                  roomName: this.state.currentRoom.name,
+                  token: getSession(), 
+                  url: wsUrl, 
+                  userName: this.props.userName,
+                  userId: this.props.userId
+                }} 
+                ports={this.setupElmPorts} 
+                key={this.state.currentRoom.id}
+              />
+            }
+          </Col>
+          <Col xs={12} sm={3} smPull={9}>
             <Rooms 
               setCurrentRoom={this.setCurrentRoom} 
               rooms={this.state.rooms} 
               currentRoom={this.state.currentRoom} 
               openCreateRoomModal={this.openCreateRoomModal} />
-          </Col>
-          <Col xs={9} >
-            {this.state.currentRoom.id &&
-                <Elm 
-                  src={Chat} 
-                  flags={{
-                    roomId: this.state.currentRoom.id, 
-                    roomName: this.state.currentRoom.name,
-                    token: getSession(), 
-                    url: wsUrl, 
-                    userName: this.props.userName,
-                    userId: this.props.userId
-                  }} 
-                  ports={this.setupElmPorts} 
-                  key={this.state.currentRoom.id}
-                />
-            }
           </Col>
         </Row>
       </div>
