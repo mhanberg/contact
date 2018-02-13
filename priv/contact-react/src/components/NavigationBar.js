@@ -76,7 +76,7 @@ const NavigationBar = (props) => {
   return(
     <Navbar inverse collapseOnSelect>
       <Navbar.Header>
-        <Navbar.Text>Contact</Navbar.Text>
+        <Navbar.Brand>Contact</Navbar.Brand>
         <Navbar.Toggle />
       </Navbar.Header>
       <Navbar.Collapse>
