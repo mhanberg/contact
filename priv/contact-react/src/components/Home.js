@@ -65,7 +65,7 @@ class Home extends React.Component {
         <CreateRoomModal teamId={this.props.teamId} currentUserId={this.props.userId} setAlert={this.props.setAlert} close={() => this.setState({showCreateRoomModal: false})} show={this.state.showCreateRoomModal}/>
         <Row>
           <Col xs={12} sm={9} smPush={3}>
-            {this.state.currentRoom.id &&
+            {this.state.currentRoom && this.state.currentRoom.id &&
               <Elm 
                 src={Chat} 
                 flags={{
